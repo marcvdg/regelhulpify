@@ -1,0 +1,18 @@
+{% extends 'regelhulpify/base.html' %}
+
+{% block content %}
+    <p class='mt-4 mb-4 text-muted'>> {{tool.name}} > {{question.text}}</p>
+    <h1 class="">Antwoord aanpassen</h1>
+    <div>
+        <form action="" method="post">
+            {% csrf_token %}
+            <table class="mt-3 mb-3">
+            {{ form.as_table }}
+            </table>
+            <input type="submit" value="Veranderingen opslaan" class="btn btn-primary">
+            
+          </form>
+          <a href="{% url 'builder_question' tool.id question.position %}" class="btn btn-light mt-5">Terug naar vraag</a>
+    </div>
+    
+{% endblock %}

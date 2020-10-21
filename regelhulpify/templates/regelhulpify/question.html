@@ -1,0 +1,19 @@
+{% extends 'regelhulpify/base.html' %}
+
+{% block content %}
+    <h1 class="text-muted">{{tool.name}}</h1>
+    <h2>{{question.text}}</h2>
+    <p>{{question.expl}}</p>
+    <div>
+        {% for answer in answers %}
+        <div>
+            {% if answer.nextquestion %}
+            <a href="{% url 'question' tool.id answer.nextquestion.position %}" class="btn btn-primary mt-2">{{ answer.text }}</a>
+            {% else %}
+            <a href="{% url 'question' tool.id next %}" class="btn btn-primary mt-2">{{ answer.text }}</a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    <a href="{% url 'tool' tool.id %}" class="btn btn-light mt-5">Naar het begin</a>
+{% endblock %}

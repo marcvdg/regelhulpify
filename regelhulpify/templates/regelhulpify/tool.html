@@ -1,0 +1,9 @@
+{% extends 'regelhulpify/base.html' %}
+
+{% block content %}
+    <h1>{{tool.name}}</h1>
+    <p>{{tool.desc}}</p>
+    <a href="{% url 'question' tool.id 1 %}" class="btn btn-primary">Start</a>
+{% endblock %}
+
+

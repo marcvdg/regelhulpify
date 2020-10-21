@@ -1,0 +1,22 @@
+{% extends 'regelhulpify/base.html' %}
+
+{% block content %}
+    <h1 class="text-muted">{{tool.name}}</h1>
+    <p class='mt-4 mb-4'>{{tool.desc}}</p>
+    <div>
+        {% for question in tool.question_set.all %}
+        <div class="builder_question">
+            <a href="{% url 'builder_question' tool.id question.position %}" >{{ question.text }}</a>
+        
+            <ul>
+                {% for answer in question.answer_set.all %}
+                <li>{{answer.text}} <span class="text-muted">> {{ answer.nextquestion.text }}</span></li>
+                {% endfor %}
+            </ul>
+            <!-- <a href="{% url 'qup' question.id %}">Up</a><a href="{% url 'qdown' question.id %}">Down</a> -->
+        </div>
+        {% endfor %}
+    </div>
+    <a href="{% url 'newquestion' tool.id %}" class="btn btn-primary mt-5">Nieuwe vraag</a>
+    <a href="{% url 'builder' %}" class="btn btn-light mt-5">Terug naar overzicht</a>
+{% endblock %}
