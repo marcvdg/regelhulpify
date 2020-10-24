@@ -4,7 +4,7 @@
     <h1 class="text-muted">{{tool.name}}</h1>
     <p class='mt-4 mb-4'>{{tool.desc}}</p>
     <div>
-        {% for question in tool.question_set.all %}
+        {% for question in questions %}
         <div class="builder_question">
             <a href="{% url 'builder_question' tool.id question.position %}" >{{ question.text }}</a>
         
@@ -13,7 +13,7 @@
                 <li>{{answer.text}} <span class="text-muted">> {{ answer.nextquestion.text }}</span></li>
                 {% endfor %}
             </ul>
-            <!-- <a href="{% url 'qup' question.id %}">Up</a><a href="{% url 'qdown' question.id %}">Down</a> -->
+            <a href="{% url 'question_move' question.id 'up' %}">Up</a><a href="{% url 'question_move' question.id 'down' %}">Down</a>
         </div>
         {% endfor %}
     </div>

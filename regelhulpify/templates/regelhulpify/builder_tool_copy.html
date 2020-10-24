@@ -1,0 +1,56 @@
+{% extends 'regelhulpify/base.html' %}
+
+{% block content %}
+    
+    <h1 id="tool_name" class="text-muted"></h1>
+    <p id="tool_desc" class='mt-4 mb-4'></p>    
+    <div id="question_list"></div>
+
+    <a href="{% url 'newquestion' tool.id %}" class="btn btn-primary mt-5">Nieuwe vraag</a>
+    <a href="{% url 'builder' %}" class="btn btn-light mt-5">Terug naar overzicht</a>
+
+    <script>
+        function deleteQuestion(id){
+            fetch('../api/question_delete/' + id, {
+                method: 'DELETE',
+                })
+                .then(res => res.text()) // or res.json()
+                .then(res => console.log(res))
+                .then(getTool())
+            
+        }
+        
+
+        function writeQuestion(element){
+            // Write line
+            const question = document.createElement('div');
+            question.className = 'question-name';
+            question.id = `q_${element.pk}`
+            question.innerHTML = `<a href="/${element.tool}/${element.position}" class="mt-2">${element.text}</a>
+                                <span class="text-danger" onclick="deleteQuestion(${element.id})">(Remove)</span>
+                                <div class="mb-4">${element.expl}</div>`
+
+            document.querySelector('#question_list').append(question)
+        }
+    
+        function getTool() {
+            document.querySelector('#question_list').innerHTML = "";
+            // Fetch them tools
+            const path = window.location.pathname.split('/');
+            fetch(`/api/get_complete_tool/${path[2]}`)
+            .then(response => response.json())
+            .then(result => {
+                const tool = JSON.parse(result.tool)[0];
+                const questions = result.questions
+                document.querySelector('#tool_name').innerHTML = tool.fields.name;
+                document.querySelector('#tool_desc').innerHTML = tool.fields.desc;
+                questions.forEach(element => {
+                    writeQuestion(element); 
+                });   
+            });
+        
+        }
+
+        getTool();
+    </script>
+{% endblock %}

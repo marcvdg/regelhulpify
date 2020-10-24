@@ -1,9 +1,29 @@
 {% extends 'regelhulpify/base.html' %}
 
 {% block content %}
-    <h1>{{tool.name}}</h1>
-    <p>{{tool.desc}}</p>
-    <a href="{% url 'question' tool.id 1 %}" class="btn btn-primary">Start</a>
+    
+    <h1 id="tool_name" class="text-muted"></h1>
+    <p id="tool_desc" class='mt-4 mb-4'></p>    
+    <input type="button" class='btn btn-primary' id="start_button" value="Start">    
+    <a href="{% url 'home' %}" class="mt-0 btn btn-light ml-2">Terug naar overzicht</a>
+
+    <script>
+    
+        function getToolstart() {
+            // Fetch them tools
+            const path = window.location.pathname.split('/');
+            fetch(`/api/get_toolstart/${path[1]}`)
+            .then(response => response.json())
+            .then(result => {
+                document.querySelector('#tool_name').innerHTML = result.name;
+                document.querySelector('#tool_desc').innerHTML = result.desc;
+                document.querySelector('#start_button').addEventListener('click', () => {
+                    window.location.href = `/${path[1]}/${result.start}`
+                })
+            });
+        
+        }
+
+        getToolstart();
+    </script>
 {% endblock %}
-
-

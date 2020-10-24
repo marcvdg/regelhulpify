@@ -1,19 +1,47 @@
 {% extends 'regelhulpify/base.html' %}
 
 {% block content %}
-    <h1 class="text-muted">{{tool.name}}</h1>
-    <h2>{{question.text}}</h2>
-    <p>{{question.expl}}</p>
-    <div>
-        {% for answer in answers %}
-        <div>
-            {% if answer.nextquestion %}
-            <a href="{% url 'question' tool.id answer.nextquestion.position %}" class="btn btn-primary mt-2">{{ answer.text }}</a>
-            {% else %}
-            <a href="{% url 'question' tool.id next %}" class="btn btn-primary mt-2">{{ answer.text }}</a>
-            {% endif %}
-        </div>
-        {% endfor %}
-    </div>
-    <a href="{% url 'tool' tool.id %}" class="btn btn-light mt-5">Naar het begin</a>
+
+    <h1 id="tool_name" class="text-muted border-bottom border-light pb-2 mb-4"></h1>
+    <h2 id="question_text"></h2> 
+    <p id="question_expl"></p>
+
+    <div id="answer_list"></div>
+
+    <input type="button" id="back_button" class="btn btn-light mt-5" value="Terug naar het begin">
+
+
+
+    <script>
+
+        function writeAnswer(element, tool){
+            // Write line
+            const answer = document.createElement('div');
+            answer.className = 'answer-button my-2';
+            answer.innerHTML = `<input type='button' class='btn btn-primary' value='${element.text}'>`
+            answer.addEventListener('click', () => {window.location.href = `/${tool}/${element.nextquestion}`})
+            document.querySelector('#answer_list').append(answer)
+        }
+    
+        function getQuestion() {
+            document.querySelector('#answer_list').innerHTML = "";
+            // Fetch them tools
+            const path = window.location.pathname.split('/');
+            fetch(`/api/get_question/${path[2]}`)
+            .then(response => response.json())
+            .then(result => {
+                result = result.question;
+                const answers = result.answers;
+                document.querySelector('#question_text').innerHTML = result.text;
+                document.querySelector('#question_expl').innerHTML = result.expl;
+                document.querySelector('#back_button').addEventListener('click', () => {window.location.href = `/${path[1]}/`})
+                answers.forEach(element => {
+                    writeAnswer(element, path[1]); 
+                });   
+            });
+        
+        }
+
+        getQuestion();
+    </script>
 {% endblock %}
