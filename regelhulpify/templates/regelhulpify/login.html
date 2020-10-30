@@ -1,0 +1,30 @@
+{% extends 'regelhulpify/base.html' %}
+
+{% block content %}
+
+{% if form.errors %}
+<p>Your username and password didn't match. Please try again.</p>
+{% endif %}
+
+<div class="card px-4 pt-4 pb-3">
+    <form method="post" action="{% url 'login' '%2F' %}">
+    {% csrf_token %}
+        <div class="alert alert-warning">
+            Deze combinatie van gebruikersnaam en wachtwoord is niet ok.
+        </div>
+        <table class="mx-2 my-4">
+            <tr>
+                <td>{{ form.username.label_tag }}</td>
+                <td>{{ form.username }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.password.label_tag }}</td>
+                <td>{{ form.password }}</td>
+            </tr>
+        </table>
+    
+        <input type="submit" class="btn btn-primary" value="Inloggen">
+    </form>
+</div>
+
+{% endblock %}

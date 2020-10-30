@@ -8,7 +8,38 @@ $theme-colors: (
   "danger": #ff4136
   );
 
+$link-color: #fa7900;
 $font-family-base: "Montserrat", Roboto, "Helvetica Neue", Arial, sans-serif;
 $headings-font-weight: 700;
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+// Regelhulpify-specific classes
+
+.rh-box {
+  position: relative
+}
+
+.rh-topright {
+  position: absolute;
+  right: 1rem;
+  top: 0.5rem;  
+}
+
+#tool_img {
+    border-radius: 1em;
+}
+
+// Login dropdown
+
+button:focus {
+  outline: 0;
+}
+
+.navbar .dropdown-menu .form-control {
+  width: 200px;
+}
 
 @import "bootstrap/bootstrap";

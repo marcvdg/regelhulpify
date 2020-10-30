@@ -4,6 +4,7 @@
     
     <h1 id="tool_name" class="text-muted"></h1>
     <p id="tool_desc" class='mt-4 mb-4'></p>    
+    <div id="tool_img" class="rh-toolimg"></div>
     <input type="button" class='btn btn-primary' id="start_button" value="Start">    
     <a href="{% url 'home' %}" class="mt-0 btn btn-light ml-2">Terug naar overzicht</a>
 
@@ -12,11 +13,14 @@
         function getToolstart() {
             // Fetch them tools
             const path = window.location.pathname.split('/');
-            fetch(`/api/get_toolstart/${path[1]}`)
+            fetch(`/api/get_toolstart/${path[1]}/`)
             .then(response => response.json())
             .then(result => {
                 document.querySelector('#tool_name').innerHTML = result.name;
                 document.querySelector('#tool_desc').innerHTML = result.desc;
+                if (result.img != null) {
+                    document.querySelector('#tool_img').innerHTML = `<img class="rounded mw-100 mb-4" src="${result.img}"></img>`;
+                };
                 document.querySelector('#start_button').addEventListener('click', () => {
                     window.location.href = `/${path[1]}/${result.start}`
                 })

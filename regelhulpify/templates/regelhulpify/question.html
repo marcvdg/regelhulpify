@@ -27,7 +27,7 @@
             document.querySelector('#answer_list').innerHTML = "";
             // Fetch them tools
             const path = window.location.pathname.split('/');
-            fetch(`/api/get_question/${path[2]}`)
+            fetch(`/api/get_question/${path[2]}/`)
             .then(response => response.json())
             .then(result => {
                 result = result.question;

@@ -4,7 +4,7 @@
         <title>Regelhulpify</title>
         <!-- <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}"> -->
         <link rel="stylesheet" href="{% static 'css/custom.css' %}"> 
-        <script src="{% static 'js/bootstrap.min.js' %}"></script> 
+        
         <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
         <!-- <link çrel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous"> -->
         
@@ -17,13 +17,39 @@
             </button>
           
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'builder' %}">Builder</a>
+                <ul class="navbar-nav mr-auto">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'builder' %}">Builder</a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item dropdown order-1">
+                        {% if user.is_authenticated %}
+                        
+                    <a class="btn btn-outline-dark" href="{% url 'logout' %}"> Logout</a>
+                        {% else %}
+                        <button type="button" id="dropdownMenu1" data-toggle="dropdown" class="btn btn-outline-dark dropdown-toggle">Login <span class="caret"></span></button>
+                        <ul class="dropdown-menu dropdown-menu-left mt-2">
+                            <li class="px-3 py-2">
+                                {% with path=request.path|urlencode:"" %}     
+                                <form class="form" role="form" action="{% url 'login' path %}" method="post">
+                                {% endwith %}
+                                    {% csrf_token %}
+                                    {{ login_form.as_p }}
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary btn-block">Login</button>
+                                    </div>
+                                    <div class="form-group text-center">
+                                        <small><a href="#" data-toggle="modal" data-target="#modalPassword">Forgot password?</a></small>
+                                    </div>
+                              </form>
+                          </li>
+                      </ul>
+                      {% endif %}
                   </li>
-              </ul>
+                </ul>
             </div>
-          </nav>
+        </nav>
 
         <div class="content container mt-5">
             <div class="row">
@@ -33,7 +59,7 @@
                 </div>
             </div>
         </div>
-        <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
-        <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script> -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script> 
     </body>
 </html>

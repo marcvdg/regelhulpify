@@ -1,4 +1,30 @@
 @import url(https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,500;0,600;1,300;1,500;1,600);
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.rh-box {
+  position: relative;
+}
+
+.rh-topright {
+  position: absolute;
+  right: 1rem;
+  top: 0.5rem;
+}
+
+#tool_img {
+  border-radius: 1em;
+}
+
+button:focus {
+  outline: 0;
+}
+
+.navbar .dropdown-menu .form-control {
+  width: 200px;
+}
+
 /*!
  * Bootstrap v4.5.3 (https://getbootstrap.com/)
  * Copyright 2011-2020 The Bootstrap Authors
@@ -155,7 +181,7 @@ sup {
 }
 
 a {
-  color: #007bff;
+  color: #fa7900;
   text-decoration: none;
   background-color: transparent;
 }
@@ -3340,7 +3366,7 @@ fieldset:disabled a.btn {
 
 .btn-link {
   font-weight: 400;
-  color: #007bff;
+  color: #fa7900;
   text-decoration: none;
 }
 

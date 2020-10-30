@@ -1,28 +1,79 @@
 import json
-from django.shortcuts import render, get_object_or_404
+import urllib
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.db.models import Max
 from django.urls import reverse
 from django.core.serializers import serialize
 from django.forms.models import model_to_dict
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
 
 from regelhulpify.models import Tool, Question, Answer
 from regelhulpify.forms import ToolForm, QuestionForm, AnswerForm
 from regelhulpify.util import reset_tool, question_load_helper
-
-# Create your views here.
+from regelhulpify.context_processors import login_form
 
 def home(request):
     return render(request, 'regelhulpify/index.html')
 
+#LOGIN
+
+def login_view(request, origin):
+    print(request)
+    origin = urllib.parse.unquote(origin)
+    if request.method == "POST":
+
+        # Attempt to sign user in
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+
+        # Check if authentication successful
+        if user is not None:
+            login(request, user)
+            return redirect(origin)
+        else:
+            return redirect('login_page')
+    else:
+        return HttpResponse(status="403")
+
+def logout_view(request):
+    logout(request)
+    return redirect('home')
+
+def login_page(request):
+    if request.method == "POST":
+
+        # Attempt to sign user in
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+
+        # Check if authentication successful
+        if user is not None:
+            login(request, user)
+            return redirect(origin)
+        else:
+            context = {'form': AuthenticationForm(request.post)}
+            return render(request, 'regelhulpify/login.html', context)
+    else:
+        context = {'form': AuthenticationForm}
+        return render(request, 'regelhulpify/login.html', context)
+
+# BUILDER
+
+@login_required
 def builder(request):
     context = {'tools': Tool.objects.all()}
     return render(request, 'regelhulpify/builder.html', context)
 
+@login_required
 def builder_question(request, tool, question):
     t = get_object_or_404(Tool, id=tool)
-    q = Question.objects.get(tool=t, position=question) 
+    q = Question.objects.get(tool=t, pk=question) 
     a = Answer.objects.filter(question=q)
     if request.method == 'POST':
         form = QuestionForm(request.POST, instance=q)
@@ -36,15 +87,17 @@ def builder_question(request, tool, question):
     context = {'form': form, 'tool': t, 'question': q, 'answers': a}
     return render(request, 'regelhulpify/builder_question.html', context)
 
-def builder_answer(request, tool, question, answer):
-    t = get_object_or_404(Tool, id=tool)
-    q = Question.objects.get(tool=t, position=question) 
-    a = Answer.objects.get(pk=answer)
+
+@login_required
+def builder_answer(request, answer):
+    a = get_object_or_404(Answer, pk=answer)
+    q = get_object_or_404(Question, pk=a.question.id) 
+    t = get_object_or_404(Tool, pk=q.tool.id) 
     if request.method == 'POST':
         form = AnswerForm(t, request.POST, instance=a)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('builder_question', args=[tool, question]))
+            return HttpResponseRedirect(reverse('builder_question', args=[t.id, q.id]))
         else:
             context = {'form': form, 'tool': t, 'question': q, 'answers': a}
             return render(request, 'regelhulpify/builder_question.html', context)
@@ -52,9 +105,10 @@ def builder_answer(request, tool, question, answer):
     context = {'form': form, 'tool': t, 'question': q, 'answers': a}
     return render(request, 'regelhulpify/builder_answer.html', context)
 
+@login_required
 def newanswer(request, tool, question):
     t = get_object_or_404(Tool, id=tool)
-    q = Question.objects.get(tool=t, position=question) 
+    q = Question.objects.get(tool=t, pk=question) 
     if request.method == 'POST':
         form = AnswerForm(t, request.POST)
         if form.is_valid():
@@ -68,6 +122,7 @@ def newanswer(request, tool, question):
         context = {'form': form, 'tool': t, 'question': q}
         return render(request, 'regelhulpify/newanswer.html', context)
 
+@login_required
 def builder_tool(request, tool):
     t = get_object_or_404(Tool, id=tool)
     q = Question.objects.order_by("position").filter(tool=t) # overbodig tot API
@@ -76,6 +131,7 @@ def builder_tool(request, tool):
     context = {'tool': t, 'questions': q, 'answers': a}
     return render(request, 'regelhulpify/builder_tool_copy.html', context)
 
+@login_required
 def newtool(request):
     if request.method == 'POST':
         form = ToolForm(request.POST)
@@ -89,6 +145,7 @@ def newtool(request):
         context = {'form': form}
         return render(request, 'regelhulpify/newtool.html', context)
 
+@login_required
 def newquestion(request, tool):
     t = get_object_or_404(Tool, id=tool)
     if request.method == 'POST':
@@ -112,12 +169,6 @@ def tool(request, tool):
     return render(request, 'regelhulpify/tool.html', context)
 
 def question(request, tool, question):
-    # t = get_object_or_404(Tool, id=tool)
-    # q = t.question_set.get(position=question)
-    # a = q.answer_set.all()
-    # n = q.position + 1
-    # context = {'tool': t, 'question': q, 'answers': a, 'next': n}
-    # return render(request, 'regelhulpify/question.html', context)
     return render(request, 'regelhulpify/question.html')
 
 # API paths
@@ -143,7 +194,7 @@ def get_toolstart(request, tool):
     '''Get a single tool and the start question'''
     t = Tool.objects.get(pk=tool)
     q = t.question_set.get(position=1)
-    data = {'name': t.name, 'desc': t.desc, 'start': q.pk}
+    data = {'name': t.name, 'desc': t.desc, 'img': t.img,'start': q.pk}
     return JsonResponse(data, safe=False)    
 
 def get_question(request, question):
@@ -154,25 +205,29 @@ def get_question(request, question):
     data = {'question': question_dict}
     return JsonResponse(data, safe=False)    
 
+@csrf_exempt
 def question_move(request, question, direction):
     '''Change the position of a question by 1'''
-    if direction not in ["up", "down"]:
-        return HttpResponse(status=400)
+    if (request.method != "PUT") or (direction not in ["up", "down"]):
+        return HttpResponse(status=403)
     q = Question.objects.get(pk=question)
     t = q.tool
-    next_p = q.position + 1 if (direction == 'up') else q.position - 1
 
+    # Reset question numbering in case an earlier request went wrong
+    reset_tool(t.id)
+
+    # Get next question, if it exists
+    next_p = q.position + 1 if (direction == 'up') else q.position - 1
     try:
         next_q = t.question_set.get(position=next_p)
     except:
-        return HttpResponse(status=403)
+        return HttpResponse(status=204)
     
-    #Trade places
+    # Trade places
     next_q.position = q.position
     q.position = 9999
     q.save()
     next_q.save()
-    
     q.position = next_p
     q.save()
 
@@ -189,9 +244,12 @@ def question_delete(request, question):
         return HttpResponse(status=403)  
 
 def tool_delete(request, tool):
-    t = get_object_or_404(Tool, id=tool)
-    t.delete()
-    return HttpResponse(status=200)  
+    if request.method == "DELETE":
+        t = get_object_or_404(Tool, id=tool)
+        t.delete()
+        return HttpResponse(status=200)  
+    else:
+        return HttpResponse(status=403)  
 
 
 
