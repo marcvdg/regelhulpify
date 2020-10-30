@@ -1,1 +1,1 @@
-web: gunicorn regelhulpify.wsgi
+web: gunicorn web_project.wsgi
