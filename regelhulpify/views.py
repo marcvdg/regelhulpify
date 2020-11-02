@@ -129,7 +129,7 @@ def builder_tool(request, tool):
     a = Answer.objects.filter(question=q)
     print(q)
     context = {'tool': t, 'questions': q, 'answers': a}
-    return render(request, 'regelhulpify/builder_tool_copy.html', context)
+    return render(request, 'regelhulpify/builder_tool.html', context)
 
 @login_required
 def newtool(request):

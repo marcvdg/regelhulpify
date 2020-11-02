@@ -65,6 +65,4 @@ function getTool() {
 
     )
 
-}
-
-;
+};
