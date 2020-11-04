@@ -19,6 +19,7 @@ urlpatterns = [
     path("api/tool_delete/<int:tool>/", views.tool_delete, name="tool_delete"),
     path("api/question_move/<int:question>/<str:direction>/", views.question_move, name="question_move"),
     path("api/question_delete/<int:question>/", views.question_delete, name="question_delete"),
+    path("api/answer_delete/<int:answer>/", views.answer_delete, name="answer_delete"),
     path("login/<str:origin>", views.login_view, name="login"),
     path("login_page/", views.login_page, name="login_page"),
     path("logout/", views.logout_view, name="logout"),

@@ -33,9 +33,12 @@ function writeQuestion(element){
     question.id = `q_${element.pk}`
     let answer_html = ''
     // Create answer lines
-    element.answers.forEach(element => {
-        answer_html += `<li><a href="/builder/answer/${element.id}"><span class="text-muted">${element.text.replace(/"|'/g, '&apos;')} &rarr; ${element.nexttext.replace(/"|'/g, '&apos;')}</span></a></li>`
-    });
+    if (!(element.result)){
+        element.answers.forEach(element => {
+            answer_html += `<li><a href="/builder/answer/${element.id}"><span class="text-muted">${element.text.replace(/"|'/g, '&apos;')} &rarr; ${element.nexttext.replace(/"|'/g, '&apos;')}</span></a></li>`
+        });
+        answer_html += `<li><a href='/builder/${element.tool}/${element.id}/newanswer'>Nieuw antwoord...</li>`;
+    }
     question.innerHTML = `${r_label}<a href="/builder/${element.tool}/${element.id}" class="mt-4 pr-5">${element.text.replace(/"|'/g, '&apos;')}</a>
                         
                         <div class="">${element.expl.replace(/"|'/g, '&apos;')}</div>

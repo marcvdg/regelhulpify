@@ -252,10 +252,20 @@ def question_delete(request, question):
     else:
         return HttpResponse(status=403)  
 
+@csrf_exempt
 def tool_delete(request, tool):
     if request.method == "DELETE":
         t = get_object_or_404(Tool, id=tool)
         t.delete()
+        return HttpResponse(status=200)  
+    else:
+        return HttpResponse(status=403)  
+
+@csrf_exempt
+def answer_delete(request, answer):
+    if request.method == "DELETE":
+        a = get_object_or_404(Answer, pk=answer)
+        a.delete()
         return HttpResponse(status=200)  
     else:
         return HttpResponse(status=403)  

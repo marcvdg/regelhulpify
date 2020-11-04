@@ -12,7 +12,27 @@
             <input type="submit" value="Veranderingen opslaan" class="btn btn-primary">
             
           </form>
-          <a href="{% url 'builder_question' tool.id question.id %}" class="btn btn-light mt-5">Terug naar vraag</a>
+          <a href="{% url 'builder_question' tool.id question.id %}" class="btn btn-light mt-5">&larr; Terug naar vraag</a>
+          <input type="button" class="btn btn-danger mt-5" id="answer_delete" value="Antwoord verwijderen">
     </div>
+
+    <script>
+
+        function deleteAnswerHandler() {
+            const path = window.location.pathname.split('/');
+            answer_id = path[3];
+            fetch('/api/answer_delete/' + answer_id, {
+                method: 'delete'
+            })
+            .then(response => response.json());
+            window.location.href = '/builder';
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelector('#answer_delete').addEventListener('click', deleteAnswerHandler);
+        });
+        
+    </script>
+
     
 {% endblock %}
