@@ -1,13 +1,13 @@
 {% extends 'regelhulpify/base.html' %}
 
 {% block content %}
-    <h1>Nieuwe vraag voor '{{ tool.name }}'</h1>
+    <h1>Nieuwe {{ type }} voor '{{ tool.name }}'</h1> <!-- aanpassen voor uitkomst -->
     <form action="" method="post">
         {% csrf_token %}
         <table class="mt-3 mb-3">
         {{ form.as_table }}
         </table>
-        <input type="submit" value="Create new question" class="btn btn-success">
+        <input type="submit" value="{{ type|title }} opslaan" class="btn btn-success">
       </form>
 {% endblock %}
 

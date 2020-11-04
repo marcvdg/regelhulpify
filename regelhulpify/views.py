@@ -71,6 +71,50 @@ def builder(request):
     return render(request, 'regelhulpify/builder.html', context)
 
 @login_required
+def newtool(request):
+    if request.method == 'POST':
+        form = ToolForm(request.POST)
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            form.save()
+            # redirect to a new URL:
+            return HttpResponseRedirect(reverse('builder'))
+    else:        
+        form = ToolForm
+        context = {'form': form}
+        return render(request, 'regelhulpify/newtool.html', context)
+
+@login_required
+def builder_tool(request, tool):
+    t = get_object_or_404(Tool, id=tool)
+    q = Question.objects.order_by("position").filter(tool=t) # overbodig tot API
+    a = Answer.objects.filter(question=q)
+    print(q)
+    context = {'tool': t, 'questions': q, 'answers': a}
+    return render(request, 'regelhulpify/builder_tool.html', context)
+
+@login_required
+def newquestion(request, tool, result=0):
+    t = get_object_or_404(Tool, id=tool)
+    if request.method == 'POST':
+        form = QuestionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('builder_tool', args=[tool]))
+        else:
+            context = {'form': form, 'tool': t}
+            return render(request, 'regelhulpify/newquestion.html', context)
+    else:               
+        # Set position
+        highest = t.question_set.aggregate(Max('position')).get('position__max') or 0
+        p = highest + 1
+        form = QuestionForm(initial={'tool' : t, 'position': p, 'result': result})  
+
+        r = 'vraag' if result == 0 else 'uitkomst'
+        context = {'form': form, 'tool': t, 'type': r}
+        return render(request, 'regelhulpify/newquestion.html', context)
+
+@login_required
 def builder_question(request, tool, question):
     t = get_object_or_404(Tool, id=tool)
     q = Question.objects.get(tool=t, pk=question) 
@@ -83,27 +127,13 @@ def builder_question(request, tool, question):
         else:
             context = {'form': form, 'tool': t, 'question': q, 'answers': a}
             return render(request, 'regelhulpify/builder_question.html', context)
-    form = QuestionForm(initial={'text': q.text, 'expl': q.expl, 'tool': q.tool, 'position': q.position})  
-    context = {'form': form, 'tool': t, 'question': q, 'answers': a}
+
+    # GET request: set form and context        
+    form = QuestionForm(initial={'text': q.text, 'expl': q.expl, 'tool': q.tool, 'position': q.position, 'result': q.result})
+    r = 'Vraag' if q.result == 0 else 'Uitkomst' 
+    context = {'form': form, 'tool': t, 'question': q, 'answers': a, 'type': r}
     return render(request, 'regelhulpify/builder_question.html', context)
 
-
-@login_required
-def builder_answer(request, answer):
-    a = get_object_or_404(Answer, pk=answer)
-    q = get_object_or_404(Question, pk=a.question.id) 
-    t = get_object_or_404(Tool, pk=q.tool.id) 
-    if request.method == 'POST':
-        form = AnswerForm(t, request.POST, instance=a)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('builder_question', args=[t.id, q.id]))
-        else:
-            context = {'form': form, 'tool': t, 'question': q, 'answers': a}
-            return render(request, 'regelhulpify/builder_question.html', context)
-    form = AnswerForm(t, instance=a)  
-    context = {'form': form, 'tool': t, 'question': q, 'answers': a}
-    return render(request, 'regelhulpify/builder_answer.html', context)
 
 @login_required
 def newanswer(request, tool, question):
@@ -123,45 +153,24 @@ def newanswer(request, tool, question):
         return render(request, 'regelhulpify/newanswer.html', context)
 
 @login_required
-def builder_tool(request, tool):
-    t = get_object_or_404(Tool, id=tool)
-    q = Question.objects.order_by("position").filter(tool=t) # overbodig tot API
-    a = Answer.objects.filter(question=q)
-    print(q)
-    context = {'tool': t, 'questions': q, 'answers': a}
-    return render(request, 'regelhulpify/builder_tool.html', context)
-
-@login_required
-def newtool(request):
+def builder_answer(request, answer):
+    a = get_object_or_404(Answer, pk=answer)
+    q = get_object_or_404(Question, pk=a.question.id) 
+    t = get_object_or_404(Tool, pk=q.tool.id) 
     if request.method == 'POST':
-        form = ToolForm(request.POST)
-        if form.is_valid():
-            # process the data in form.cleaned_data as required
-            form.save()
-            # redirect to a new URL:
-            return HttpResponseRedirect(reverse('builder'))
-    else:        
-        form = ToolForm
-        context = {'form': form}
-        return render(request, 'regelhulpify/newtool.html', context)
-
-@login_required
-def newquestion(request, tool):
-    t = get_object_or_404(Tool, id=tool)
-    if request.method == 'POST':
-        form = QuestionForm(request.POST)
+        form = AnswerForm(t, request.POST, instance=a)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('builder_tool', args=[tool]))
+            return HttpResponseRedirect(reverse('builder_question', args=[t.id, q.id]))
         else:
-            context = {'form': form, 'tool': t}
-            return render(request, 'regelhulpify/newquestion.html', context)
-    else:               
-        highest = t.question_set.aggregate(Max('position')).get('position__max') or 0
-        p = highest + 1
-        form = QuestionForm(initial={'tool' : t, 'position': p})  
-        context = {'form': form, 'tool': t}
-        return render(request, 'regelhulpify/newquestion.html', context)
+            context = {'form': form, 'tool': t, 'question': q, 'answers': a}
+            return render(request, 'regelhulpify/builder_question.html', context)
+    form = AnswerForm(t, instance=a)  
+    context = {'form': form, 'tool': t, 'question': q, 'answers': a}
+    return render(request, 'regelhulpify/builder_answer.html', context)
+
+
+# FRONT
 
 def tool(request, tool):
     t = get_object_or_404(Tool, id=tool)

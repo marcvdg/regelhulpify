@@ -7,7 +7,9 @@
     <p id="tool_desc" class='mt-4 mb-4'></p>    
     <div id="question_list"></div>
 
-    <a href="{% url 'newquestion' tool.id %}" class="btn btn-primary mt-5">Nieuwe vraag</a>
+    <a href="{% url 'newquestion' tool.id 0 %}" class="btn btn-primary mt-5">Nieuwe vraag</a>
+    <a href="{% url 'newquestion' tool.id 1 %}" class="btn btn-primary mt-5">Nieuwe uitkomst</a>
+    <a href="{% url 'tool_delete' tool.id %}" class="btn btn-danger mt-5">Tool verwijderen</a>
     <a href="{% url 'builder' %}" class="btn btn-light mt-5">&larr; Terug naar overzicht</a>
 
     <script src="{% static 'js/builder_tool.js' %}"></script>

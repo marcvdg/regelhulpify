@@ -28,13 +28,16 @@ function writeQuestion(element){
     // Write line
     const question = document.createElement('div');
     question.className = 'question-name rh-box rounded bg-light p-2 my-3';
+    console.log(element.result)
+    let r_label = element.result ? '<div class="text-muted small">Uitkomst </div>' : '';
     question.id = `q_${element.pk}`
     let answer_html = ''
     // Create answer lines
     element.answers.forEach(element => {
-        answer_html += `<li><a href="/builder/answer/${element.id}"><span class="text-muted">${element.text.replace(/"|'/g, '&apos;')} > ${element.nexttext.replace(/"|'/g, '&apos;')}</span></a></li>`
+        answer_html += `<li><a href="/builder/answer/${element.id}"><span class="text-muted">${element.text.replace(/"|'/g, '&apos;')} &rarr; ${element.nexttext.replace(/"|'/g, '&apos;')}</span></a></li>`
     });
-    question.innerHTML = `<a href="/builder/${element.tool}/${element.id}" class="mt-4 pr-5">${element.text.replace(/"|'/g, '&apos;')}</a>
+    question.innerHTML = `${r_label}<a href="/builder/${element.tool}/${element.id}" class="mt-4 pr-5">${element.text.replace(/"|'/g, '&apos;')}</a>
+                        
                         <div class="">${element.expl.replace(/"|'/g, '&apos;')}</div>
                         <ul>${answer_html}</ul>
                         <div class="rh-topright text-muted small">

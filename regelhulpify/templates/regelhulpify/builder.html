@@ -1,13 +1,14 @@
 {% extends 'regelhulpify/base.html' %}
 
 {% block content %}
-    <h1 class="text-muted">Alle tools</h1>
+    <h1 class="">Bouw een regelhulp...</h1>
+    <a href="{% url 'newtool' %}" class="btn btn-success mt-3">Nieuwe regelhulp</a>
+    <h3 class="mt-5">...of verbouw een bestaande</h3>
     <div>
         {% for tool in tools %}
-        <div>
+        <li>
             <a href="{% url 'builder_tool' tool.id %}" >{{ tool.name }}</a>
-        </div>
+        </li>
         {% endfor %}
     </div>
-    <a href="{% url 'newtool' %}" class="btn btn-primary mt-5">Nieuwe regelhulp</a>
 {% endblock %}

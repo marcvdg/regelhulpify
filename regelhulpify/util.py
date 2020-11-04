@@ -39,6 +39,7 @@ def question_load_helper(question):
         'expl': question.expl, 
         'position': question.position,
         'tool': question.tool.id, 
+        'result': question.result,
         'answers': answer_list
         }
     return question_dict

@@ -15,8 +15,8 @@ class ToolForm(ModelForm):
 class QuestionForm(ModelForm):
     class Meta:
         model = Question
-        fields = ['text','expl','tool','position']
-        widgets = {'tool': HiddenInput(), 'position': HiddenInput()}
+        fields = ['text','expl','tool','position', 'result']
+        widgets = {'tool': HiddenInput(), 'position': HiddenInput(), 'result': HiddenInput()}
         labels = {
         "text": "Tekst",
         "expl": "Toelichting",
