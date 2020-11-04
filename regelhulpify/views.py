@@ -129,7 +129,7 @@ def builder_question(request, tool, question):
             return render(request, 'regelhulpify/builder_question.html', context)
 
     # GET request: set form and context        
-    form = QuestionForm(initial={'text': q.text, 'expl': q.expl, 'tool': q.tool, 'position': q.position, 'result': q.result})
+    form = QuestionForm(instance=q)
     r = 'Vraag' if q.result == 0 else 'Uitkomst' 
     context = {'form': form, 'tool': t, 'question': q, 'answers': a, 'type': r}
     return render(request, 'regelhulpify/builder_question.html', context)
@@ -163,10 +163,10 @@ def builder_answer(request, tool, question, answer):
             form.save()
             return HttpResponseRedirect(reverse('builder_question', args=[t.id, q.id]))
         else:
-            context = {'form': form, 'tool': t, 'question': q, 'answers': a}
+            context = {'form': form, 'tool': t, 'question': q, 'answer': a}
             return render(request, 'regelhulpify/builder_question.html', context)
     form = AnswerForm(t, instance=a)  
-    context = {'form': form, 'tool': t, 'question': q, 'answers': a}
+    context = {'form': form, 'tool': t, 'question': q, 'answer': a}
     return render(request, 'regelhulpify/builder_answer.html', context)
 
 

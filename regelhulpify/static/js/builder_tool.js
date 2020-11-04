@@ -37,7 +37,7 @@ function writeQuestion(element){
         element.answers.forEach(a => {
             answer_html += `<li><a href="/builder/${element.tool}/${element.id}/${a.id}"><span class="text-muted">${a.text.replace(/"|'/g, '&apos;')} &rarr; ${a.nexttext.replace(/"|'/g, '&apos;')}</span></a></li>`
         });
-        answer_html += `<li><a href='/builder/${element.tool}/${element.id}/newanswer'>Nieuw antwoord...</li>`;
+        answer_html += `<li><a class="text-muted" href="/builder/${element.tool}/${element.id}/newanswer">Nieuw antwoord...</a></li>`;
     }
     question.innerHTML = `${r_label}<a href="/builder/${element.tool}/${element.id}" class="mt-4 pr-5">${element.text.replace(/"|'/g, '&apos;')}</a>
                         

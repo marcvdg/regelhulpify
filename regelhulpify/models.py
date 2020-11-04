@@ -4,9 +4,9 @@ from django.contrib.auth.models import User
 # Create your models here.
 class Tool(models.Model):
     #owner = models.CharField(max_length=128)
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=128, unique=True)
     desc = models.CharField(max_length=1024)
-    img = models.URLField(max_length=1024, null=True)
+    img = models.URLField(max_length=1024, null=True, blank=True)
 
     def __str__(self):
         """Regelhulp-beschrijving."""

@@ -6,7 +6,7 @@ function writeAnswer(element, tool){
     // Write line
     const answer = document.createElement('div');
     answer.className = 'answer-button my-2';
-    answer.innerHTML = `<input type='button' class='btn btn-primary' value='${element.text}'>`
+    answer.innerHTML = `<input type='button' class="btn btn-primary" value='${element.text.replace(/"|'/g, '&apos;')}'>`
     answer.addEventListener('click', () => {window.location.href = `/${tool}/${element.nextquestion}`})
     document.querySelector('#answer_list').append(answer)
 }
