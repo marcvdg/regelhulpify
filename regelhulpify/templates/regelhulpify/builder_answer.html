@@ -1,4 +1,5 @@
 {% extends 'regelhulpify/base.html' %}
+{% load static %}
 
 {% block content %}
     <p class='mt-4 mb-4 text-muted'>> {{tool.name}} > {{question.text}}</p>
@@ -16,23 +17,7 @@
           <input type="button" class="btn btn-danger mt-5" id="answer_delete" value="Antwoord verwijderen">
     </div>
 
-    <script>
-
-        function deleteAnswerHandler() {
-            const path = window.location.pathname.split('/');
-            answer_id = path[3];
-            fetch('/api/answer_delete/' + answer_id, {
-                method: 'delete'
-            })
-            .then(response => response.json());
-            window.location.href = '/builder';
-        }
-
-        document.addEventListener('DOMContentLoaded', (event) => {
-            document.querySelector('#answer_delete').addEventListener('click', deleteAnswerHandler);
-        });
-        
-    </script>
+    <script src="{% static 'js/builder_answer.js' %}"></script>
 
     
 {% endblock %}

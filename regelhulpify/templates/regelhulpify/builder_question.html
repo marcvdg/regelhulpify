@@ -18,7 +18,7 @@
             <h4 >Antwoorden</h4>
             <ul>
                 {% for answer in question.answer_set.all %}
-                <li><a href="{% url 'builder_answer' answer.id %}"> {{answer.text}} <span class="text-muted">> {{ answer.nextquestion.text }}</span></a></li>
+                <li><a href="{% url 'builder_answer' tool.id question.id answer.id %}"> {{answer.text}} <span class="text-muted">> {{ answer.nextquestion.text }}</span></a></li>
                 {% endfor %}
                 <li><a href="{% url 'newanswer' tool.id question.id %}" class="">Nieuw antwoord toevoegen...</a></li>
             </ul>

@@ -153,7 +153,7 @@ def newanswer(request, tool, question):
         return render(request, 'regelhulpify/newanswer.html', context)
 
 @login_required
-def builder_answer(request, answer):
+def builder_answer(request, tool, question, answer):
     a = get_object_or_404(Answer, pk=answer)
     q = get_object_or_404(Question, pk=a.question.id) 
     t = get_object_or_404(Tool, pk=q.tool.id) 
