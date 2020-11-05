@@ -5,11 +5,12 @@ from django import forms
 class ToolForm(ModelForm):
     class Meta:
         model = Tool
-        fields = ['name', 'desc', 'img']
+        fields = ['name', 'desc', 'img', 'shorturl']
         labels = {
         "name": "Naam",
         "desc": "Beschrijving",
         "img": "Afbeelding (link)",
+        "shorturl": "Korte url",
         }
 
 class QuestionForm(ModelForm):

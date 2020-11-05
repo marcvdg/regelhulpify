@@ -172,10 +172,19 @@ def builder_answer(request, tool, question, answer):
 
 # FRONT
 
+# TODO: short url handler
+
 def tool(request, tool):
     t = get_object_or_404(Tool, id=tool)
     context = {'tool': t}
     return render(request, 'regelhulpify/tool.html', context)
+
+def toolslug(request, slug):
+    try: 
+        t = Tool.objects.get(shorturl=slug)
+    except:
+        return redirect('home')
+    return redirect('tool', t.pk)
 
 def question(request, tool, question):
     return render(request, 'regelhulpify/question.html')
