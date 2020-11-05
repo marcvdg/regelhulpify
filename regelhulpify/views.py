@@ -1,3 +1,8 @@
+# TODO: edit tool fields
+# TODO: link tool to user
+# TODO:
+
+
 import json
 import urllib
 from django.shortcuts import render, get_object_or_404, redirect
@@ -172,8 +177,6 @@ def builder_answer(request, tool, question, answer):
 
 # FRONT
 
-# TODO: short url handler
-
 def tool(request, tool):
     t = get_object_or_404(Tool, id=tool)
     context = {'tool': t}
@@ -211,8 +214,12 @@ def get_complete_tool(request, tool):
 def get_toolstart(request, tool):
     '''Get a single tool and the start question'''
     t = Tool.objects.get(pk=tool)
-    q = t.question_set.get(position=1)
-    data = {'name': t.name, 'desc': t.desc, 'img': t.img,'start': q.pk}
+    
+    try:
+        q = t.question_set.get(position=1).pk 
+    except: 
+        q = ''
+    data = {'name': t.name, 'desc': t.desc, 'img': t.img,'start': q}
     return JsonResponse(data, safe=False)    
 
 def get_question(request, question):
