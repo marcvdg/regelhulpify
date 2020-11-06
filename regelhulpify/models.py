@@ -1,5 +1,21 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
+
+# Validator
+def safe_url(value):
+    forbidden = ['builder','admin']
+    if value.isdigit():
+        raise ValidationError(
+            _('%(value)s bevat geen letters; gebruik er minstens één'),
+            params={'value': value},
+        )
+    if value.lower() in forbidden:
+        raise ValidationError(
+            _('Je kunt "%(value)s" niet gebruiken als url. Probeer een ander woord. '),
+            params={'value': value},
+        )
 
 # Create your models here.
 class Tool(models.Model):
@@ -7,7 +23,7 @@ class Tool(models.Model):
     name = models.CharField(max_length=128, unique=True)
     desc = models.CharField(max_length=1024)
     img = models.URLField(max_length=1024, null=True, blank=True)
-    shorturl = models.SlugField(max_length=64, unique=True, null=True, blank=True)
+    shorturl = models.SlugField(max_length=64, unique=True, null=True, blank=True, validators=[safe_url])
 
     def __str__(self):
         """Regelhulp-beschrijving."""

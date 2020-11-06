@@ -5,7 +5,18 @@
     <form action="" method="post">
         {% csrf_token %}
         <table class="mt-3 mb-3">
-        {{ form.as_table }}
+          {% for field in form %}
+          <tr>
+              <td class="align-top">{{ field.label_tag }}</td>
+              <td>
+                  {{ field }}
+                  {{ field.errors }}
+                  {% if field.help_text %}
+                  <img class="tooltip" title="{{ field.help_text }}" src="{{ MEDIA_URL }}images/icon_help.png">
+                  {% endif %}
+              </td>
+          </tr>
+          {% endfor %}
         </table>
         <input type="submit" value="Maak nieuwe regelhulp" class="btn btn-success">
       </form>

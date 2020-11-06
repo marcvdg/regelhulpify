@@ -1,6 +1,6 @@
 # TODO: edit tool fields
 # TODO: link tool to user
-# TODO:
+# TODO: shorturl not builder or number, custom validator
 
 
 import json
@@ -84,6 +84,9 @@ def newtool(request):
             form.save()
             # redirect to a new URL:
             return HttpResponseRedirect(reverse('builder'))
+        else:
+            context = {'form': form}
+        return render(request, 'regelhulpify/newtool.html', context)
     else:        
         form = ToolForm
         context = {'form': form}

@@ -1,8 +1,9 @@
 {% extends 'regelhulpify/base.html' %}
+{% load static %}
 
 {% block content %}
     <p class='mt-4 mb-4 text-muted'>> {{tool.name}} > {{question.text}}</p>
-    <h1 class="">{{ type }} aanpassen</h1>
+    <h1 class="">{% if question.result == False %}Vraag{% else %}Uitkomst{% endif %} aanpassen</h1>
     <div class="mb-5">
         <form action="" method="post">
             {% csrf_token %}
@@ -23,9 +24,14 @@
                 <li><a href="{% url 'newanswer' tool.id question.id %}" class="">Nieuw antwoord toevoegen...</a></li>
             </ul>
         </div>
+    
+    <input type="button" id='question_delete' class="btn btn-danger mt-5" value='Vraag verwijderen'>
+    {% else %}
+    <input type="button" id='result_delete' class="btn btn-danger mt-5" value='Uitkomst verwijderen'>
     {% endif %}
     
-    <a href="{% url 'question_delete' question.id %}" class="btn btn-danger mt-5">{{ type }} verwijderen</a>
     <a href="{% url 'builder_tool' tool.id %}" class="btn btn-light mt-5">Terug naar regelhulp</a>
+
+    <script src="{% static 'js/builder_question.js' %}"></script>
     
 {% endblock %}

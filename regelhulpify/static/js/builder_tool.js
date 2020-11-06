@@ -1,17 +1,17 @@
 document.addEventListener('DOMContentLoaded', (event) => {
+    document.querySelector("#tool_delete").addEventListener('click', deleteToolHandler)
     getTool();
 });
 
-function deleteQuestion(id){
-    if (confirm('Weet je zeker dat deze vraag geen joy sparkt?')) {
-        const url = '../api/question_delete/' + id + '/'
-        fetch(url, {
-            method: 'DELETE',
-            })
-            .then(() => getTool())
-    } else {
-        console.log('Dan niet.');
-    }
+function deleteToolHandler() {
+    const path = window.location.pathname.split('/');
+    const id = path[2]
+    const returnPath = '/builder'
+    deleteItem('tool', id, redirectHandler, returnPath)
+}
+
+function deleteQuestionHandler(id){
+    deleteItem('question', id, getTool)
     
 }
 
@@ -46,7 +46,7 @@ function writeQuestion(element){
                         <div class="rh-topright text-muted small">
                             <span class="cursor-pointer" onclick="moveQuestion(${element.id}, 'up')">&#x25BC;</span>
                             <span class="cursor-pointer" onclick="moveQuestion(${element.id}, 'down')">&#x25B2;</span>
-                            <span class="cursor-pointer" onclick="deleteQuestion(${element.id})">X</span>
+                            <span class="cursor-pointer" onclick="deleteQuestionHandler(${element.id})">X</span>
                         </div>`
     document.querySelector('#question_list').append(question)
 }
@@ -55,7 +55,8 @@ function getTool() {
     document.querySelector('#question_list').innerHTML = "";
     // Fetch them tools
     const path = window.location.pathname.split('/');
-    fetch(`/api/get_complete_tool/${path[2]}`)
+    const id = path[2]
+    fetch(`/api/get_complete_tool/${id}`)
     .then(response => response.json())
     .then(result => {
         // console.log(result)

@@ -25,6 +25,18 @@ button:focus {
   width: 200px;
 }
 
+.errorlist {
+  -webkit-padding-start: 0;
+          padding-inline-start: 0;
+}
+
+.errorlist li {
+  list-style-type: none;
+  font-family: "Montserrat", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: #dc3545;
+  font-size: 0.7rem;
+}
+
 /*!
  * Bootstrap v4.5.3 (https://getbootstrap.com/)
  * Copyright 2011-2020 The Bootstrap Authors

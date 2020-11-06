@@ -9,7 +9,7 @@
 
     <a href="{% url 'newquestion' tool.id 0 %}" class="btn btn-primary mt-5">Nieuwe vraag</a>
     <a href="{% url 'newquestion' tool.id 1 %}" class="btn btn-primary mt-5">Nieuwe uitkomst</a>
-    <a href="{% url 'tool_delete' tool.id %}" class="btn btn-danger mt-5">Tool verwijderen</a>
+    <input type="button" class="btn btn-danger mt-5" value="Tool verwijderen" id="tool_delete">
     <a href="{% url 'builder' %}" class="btn btn-light mt-5">&larr; Terug naar overzicht</a>
 
     <script src="{% static 'js/builder_tool.js' %}"></script>
