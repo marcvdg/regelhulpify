@@ -1,0 +1,4 @@
+Bevestig je aanmelding bij Regelhulpify binnen {{ expiration_days }} dagen!
+
+Klik hier: {{site}}/accounts/activate/{{ activation_key }}/
+

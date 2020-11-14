@@ -15,8 +15,9 @@ function deleteQuestionHandler(id){
     
 }
 
+// Swaps question position attribute with the one above or below, if possible
 function moveQuestion(id, direction){
-    const url = '../api/question_move/' + id + '/' + direction + '/'
+    const url = '/api/question_move/' + id + '/' + direction + '/'
     console.log(url); 
     fetch(url, {
         method: 'PUT',
@@ -28,7 +29,6 @@ function writeQuestion(element){
     // Write line
     const question = document.createElement('div');
     question.className = 'question-name rh-box rounded bg-light p-2 my-3';
-    console.log(element.result)
     let r_label = element.result ? '<div class="text-muted small">Uitkomst </div>' : '';
     question.id = `q_${element.pk}`
     let answer_html = ''

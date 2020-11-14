@@ -115,6 +115,16 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Django_registration
+
+ACCOUNT_ACTIVATION_DAYS = 7
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 
+
+LOGIN_REDIRECT_URL = '/builder/'
+
+LOGOUT_REDIRECT_URL = '/'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/

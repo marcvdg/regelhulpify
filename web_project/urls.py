@@ -20,5 +20,7 @@ from regelhulpify import views
 urlpatterns = [
     path("", include("regelhulpify.urls")),
     path('admin/', admin.site.urls),
+    path('accounts/', include('django_registration.backends.one_step.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
     path("<str:slug>/", views.toolslug, name="toolslug"),
 ]

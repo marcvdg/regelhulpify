@@ -1,0 +1,13 @@
+{% extends 'regelhulpify/base.html' %}
+
+{% block content %}
+
+<div class="card px-4 pt-4 pb-3">
+    <form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" class="btn btn-primary" value="Inloggen">
+    </form>
+</div>
+
+{% endblock %}
