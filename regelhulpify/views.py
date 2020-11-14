@@ -24,50 +24,6 @@ from regelhulpify.context_processors import login_form
 def home(request):
     return render(request, 'regelhulpify/index.html')
 
-#LOGIN
-
-# def login_view(request, origin):
-#     print(request)
-#     origin = urllib.parse.unquote(origin)
-#     if request.method == "POST":
-
-#         # Attempt to sign user in
-#         username = request.POST["username"]
-#         password = request.POST["password"]
-#         user = authenticate(request, username=username, password=password)
-
-#         # Check if authentication successful
-#         if user is not None:
-#             login(request, user)
-#             return redirect(origin)
-#         else:
-#             return redirect('login_page')
-#     else:
-#         return HttpResponse(status="403")
-
-# def logout_view(request):
-#     logout(request)
-#     return redirect('home')
-
-def login_page(request):
-    if request.method == "POST":
-
-        # Attempt to sign user in
-        username = request.POST["username"]
-        password = request.POST["password"]
-        user = authenticate(request, username=username, password=password)
-
-        # Check if authentication successful
-        if user is not None:
-            login(request, user)
-            return redirect(origin)
-        else:
-            context = {'form': AuthenticationForm(request.post)}
-            return render(request, 'regelhulpify/login.html', context)
-    else:
-        context = {'form': AuthenticationForm}
-        return render(request, 'regelhulpify/login.html', context)
-
 # BUILDER
 
 @login_required

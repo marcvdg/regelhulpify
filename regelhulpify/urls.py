@@ -22,6 +22,6 @@ urlpatterns = [
     path("api/question_delete/<int:question>/", views.question_delete, name="question_delete"),
     path("api/answer_delete/<int:answer>/", views.answer_delete, name="answer_delete"),
     #path("login/<str:origin>", views.login_view, name="login"),
-    path("login_page/", views.login_page, name="login_page"),
+    #path("login_page/", views.login_page, name="login_page"),
     #path("logout/", views.logout_view, name="logout"),
 ]
