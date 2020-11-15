@@ -13,8 +13,24 @@
   top: 0.5rem;
 }
 
+.rh-minibtn:hover {
+  color: #fa7900;
+}
+
 #tool_img {
   border-radius: 1em;
+}
+
+.log-button {
+  margin-left: 0rem;
+  margin-top: 0.5rem;
+}
+
+@media (min-width: 992px) {
+  .log-button {
+    margin-left: 0.5rem;
+    margin-top: 0rem;
+  }
 }
 
 button:focus {

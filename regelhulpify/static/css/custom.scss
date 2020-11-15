@@ -1,5 +1,6 @@
 @import "bootstrap/_functions";
 @import "bootstrap/_variables";
+@import "bootstrap/mixins/_breakpoints";
 @import url(https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,500;0,600;1,300;1,500;1,600);
 
 $theme-colors: (
@@ -28,11 +29,26 @@ $headings-font-weight: 700;
   top: 0.5rem;  
 }
 
+.rh-minibtn:hover {
+  color: $link-color;
+}
+
 #tool_img {
     border-radius: 1em;
 }
 
 // Login dropdown
+
+.log-button {
+  margin-left: 0rem;
+  margin-top: 0.5rem;
+
+  @include media-breakpoint-up(lg) { 
+    margin-left: 0.5rem;
+    margin-top: 0rem;;
+  }
+  
+}
 
 button:focus {
   outline: 0;

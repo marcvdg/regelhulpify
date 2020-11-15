@@ -44,9 +44,9 @@ function writeQuestion(element){
                         <div class="">${element.expl.replace(/"|'/g, '&apos;')}</div>
                         <ul>${answer_html}</ul>
                         <div class="rh-topright text-muted small">
-                            <span class="cursor-pointer" onclick="moveQuestion(${element.id}, 'up')">&#x25BC;</span>
-                            <span class="cursor-pointer" onclick="moveQuestion(${element.id}, 'down')">&#x25B2;</span>
-                            <span class="cursor-pointer" onclick="deleteQuestionHandler(${element.id})">X</span>
+                            <span class="cursor-pointer rh-minibtn" onclick="moveQuestion(${element.id}, 'up')">&#x25BC;</span>
+                            <span class="cursor-pointer rh-minibtn" onclick="moveQuestion(${element.id}, 'down')">&#x25B2;</span>
+                            <span class="cursor-pointer rh-minibtn" onclick="deleteQuestionHandler(${element.id})">X</span>
                         </div>`
     document.querySelector('#question_list').append(question)
 }

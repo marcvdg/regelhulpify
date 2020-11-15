@@ -1,8 +1,3 @@
-# TODO: edit tool fields
-# TODO: link tool to user
-# TODO: fix csrf
-
-
 import json
 import urllib
 from django.shortcuts import render, get_object_or_404, redirect
@@ -47,6 +42,24 @@ def newtool(request):
         form = ToolForm
         context = {'form': form}
         return render(request, 'regelhulpify/newtool.html', context)
+
+@login_required
+def edittool(request, tool):
+    t = get_object_or_404(Tool, id=tool)
+    if request.method == 'POST':
+        form = ToolForm(request.POST, instance=t)
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            form.save()
+            # redirect to a new URL:
+            return HttpResponseRedirect(reverse('builder'))
+        else:
+            context = {'form': form}
+        return render(request, 'regelhulpify/newtool.html', context)
+    else:        
+        form = ToolForm(instance=t)
+        context = {'form': form}
+        return render(request, 'regelhulpify/edittool.html', context)
 
 @login_required
 def builder_tool(request, tool):
@@ -217,7 +230,6 @@ def question_move(request, question, direction):
 
     return HttpResponse(status=200)  
 
-@csrf_exempt
 def question_delete(request, question):
     if request.method == "DELETE":
         q = get_object_or_404(Question, pk=question)
@@ -227,7 +239,6 @@ def question_delete(request, question):
     else:
         return HttpResponse(status=403)  
 
-@csrf_exempt
 def tool_delete(request, tool):
     if request.method == "DELETE":
         t = get_object_or_404(Tool, id=tool)
@@ -236,7 +247,6 @@ def tool_delete(request, tool):
     else:
         return HttpResponse(status=403)  
 
-@csrf_exempt
 def answer_delete(request, answer):
     if request.method == "DELETE":
         a = get_object_or_404(Answer, pk=answer)
