@@ -6,6 +6,7 @@
         {% csrf_token %}
         <table class="mt-3 mb-3">
           {% for field in form %}
+          {% if field.name != "owner" %}
           <tr>
               <td class="align-top">{{ field.label_tag }}</td>
               <td>
@@ -16,6 +17,7 @@
                   {% endif %}
               </td>
           </tr>
+          {% endif %}
           {% endfor %}
         </table>
         <input type="submit" value="Maak nieuwe regelhulp" class="btn btn-success">

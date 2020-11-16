@@ -18,9 +18,15 @@ function deleteQuestionHandler(id){
 // Swaps question position attribute with the one above or below, if possible
 function moveQuestion(id, direction){
     const url = '/api/question_move/' + id + '/' + direction + '/'
-    console.log(url); 
-    fetch(url, {
+    const csrftoken = getCookie('csrftoken');
+    const request = new Request(
+        url,
+        {headers: {'X-CSRFToken': csrftoken}}
+    ); 
+
+    fetch(request, {
         method: 'PUT',
+        mode: 'same-origin',
         })
         .then(() => getTool())
 }

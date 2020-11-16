@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 # Validator
 def safe_url(value):
-    forbidden = ['builder','admin']
+    forbidden = ['builder','admin', 'login', 'register']
     if value.isdigit():
         raise ValidationError(
             _('%(value)s bevat geen letters; gebruik er minstens één'),
@@ -28,6 +28,12 @@ class Tool(models.Model):
     def __str__(self):
         """Regelhulp-beschrijving."""
         return f"{self.name} – {self.desc}"
+
+    def save(self, *args, **kwargs):
+        """Saves slug as lowercase."""
+        if self.shorturl:
+            self.shorturl = self.shorturl.lower()
+        return super(Tool, self).save(*args, **kwargs)    
 
 class Question(models.Model):
     text = models.CharField(max_length=128)

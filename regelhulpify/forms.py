@@ -5,7 +5,8 @@ from django import forms
 class ToolForm(ModelForm):
     class Meta:
         model = Tool
-        fields = ['name', 'desc', 'img', 'shorturl']
+        fields = ['name', 'desc', 'img', 'shorturl', 'owner']
+        widgets = {'owner': HiddenInput()}
         labels = {
         "name": "Naam",
         "desc": "Beschrijving",

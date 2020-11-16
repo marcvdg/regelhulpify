@@ -11,7 +11,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 
-from regelhulpify.models import Tool, Question, Answer
+from regelhulpify.models import Tool, Question, Answer, User
 from regelhulpify.forms import ToolForm, QuestionForm, AnswerForm
 from regelhulpify.util import reset_tool, question_load_helper
 from regelhulpify.context_processors import login_form
@@ -23,7 +23,11 @@ def home(request):
 
 @login_required
 def builder(request):
-    context = {'tools': Tool.objects.filter(owner=request.user)}
+    t = Tool.objects.filter(owner=request.user)
+    for tool in t:
+        print(tool.owner)
+    
+    context = {'tools': t}
     return render(request, 'regelhulpify/builder.html', context)
 
 @login_required
@@ -39,7 +43,7 @@ def newtool(request):
             context = {'form': form}
         return render(request, 'regelhulpify/newtool.html', context)
     else:        
-        form = ToolForm
+        form = ToolForm(initial={'owner': request.user})
         context = {'form': form}
         return render(request, 'regelhulpify/newtool.html', context)
 
@@ -202,7 +206,6 @@ def get_question(request, question):
     data = {'question': question_dict}
     return JsonResponse(data, safe=False)    
 
-@csrf_exempt
 def question_move(request, question, direction):
     '''Change the position of a question by 1'''
     if (request.method != "PUT") or (direction not in ["up", "down"]):
