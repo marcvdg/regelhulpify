@@ -2,9 +2,13 @@
 {% load static %}
 {% block content %}
 <div>
-    <h1>
-        Alle regelhulpen
+    <h1 class="mb-4">
+        Welcome to Regelhulpify
     </h1>
+    <p class="lead mb-5">A tool that helps you make interactive 'Regelhulpen': tools that help people understand how rules and regulations apply to their situation. Find previously made tools below, or <a href="{% url 'django_registration_register' %}">register</a> or <a href="{% url 'login' %}">log in</a> to start making them yourself.</p>
+    <h2>
+        Alle regelhulpen
+    </h2>
     <div id="tools_list">
         <ul>
             <!-- Javascript filled -->
