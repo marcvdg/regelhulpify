@@ -6,14 +6,13 @@ from django.db.models import Max
 from django.urls import reverse
 from django.core.serializers import serialize
 from django.forms.models import model_to_dict
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
-
+from django.http import HttpResponseForbidden
 from regelhulpify.models import Tool, Question, Answer, User
 from regelhulpify.forms import ToolForm, QuestionForm, AnswerForm
-from regelhulpify.util import reset_tool, question_load_helper
+from regelhulpify.util import reset_tool, question_load_helper, check_user_or_403
 from regelhulpify.context_processors import login_form
 
 def home(request):
@@ -50,6 +49,8 @@ def newtool(request):
 @login_required
 def edittool(request, tool):
     t = get_object_or_404(Tool, id=tool)
+    if t.owner != request.user:
+        return HttpResponseForbidden('Not your tool.')
     if request.method == 'POST':
         form = ToolForm(request.POST, instance=t)
         if form.is_valid():

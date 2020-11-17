@@ -3,11 +3,29 @@
 {% block content %}
 
 <div class="card px-4 pt-4 pb-3">
-    <form method="post" action="{% url 'django_registration_register' %}">
-    {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" class="btn btn-primary" value="Registreren">
-    </form>
+    <h2>Register for Regelhulpify</h2>
+    <form action="" method="post">
+        {% csrf_token %}
+        <table class="mt-3 mb-3">
+          {% for field in form %}
+
+          <tr>
+              <td class="pr-2 align-top">{{ field.label_tag }}</td>
+              <td>
+                  {{ field }}
+                  
+              </td>
+            </tr>
+            {% if field.help_text or field.errors %}
+            <tr class="mb-2">
+                <td></td>
+                <td class="text-muted small">{{ field.errors }}{{ field.help_text }}</td>
+            </tr>
+            {% endif %}
+          {% endfor %}
+        </table>
+        <input type="submit" value="Confirm registration" class="btn btn-success">
+      </form>
 </div>
 
 {% endblock %}

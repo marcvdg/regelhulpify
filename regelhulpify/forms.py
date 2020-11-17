@@ -1,6 +1,7 @@
 from django.forms import ModelForm, HiddenInput
 from regelhulpify.models import Tool, Question, Answer
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
 class ToolForm(ModelForm):
     class Meta:
@@ -8,10 +9,13 @@ class ToolForm(ModelForm):
         fields = ['name', 'desc', 'img', 'shorturl', 'owner']
         widgets = {'owner': HiddenInput()}
         labels = {
-        "name": "Naam",
-        "desc": "Beschrijving",
-        "img": "Afbeelding (link)",
-        "shorturl": "Korte url",
+            "name": "Naam",
+            "desc": "Beschrijving",
+            "img": "Afbeelding (link)",
+            "shorturl": "Korte url",
+        }
+        help_texts = {
+            'img': _('Make sure the link ends with .jpg of .png.'),
         }
 
 class QuestionForm(ModelForm):

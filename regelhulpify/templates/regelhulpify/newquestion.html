@@ -1,7 +1,7 @@
 {% extends 'regelhulpify/base.html' %}
 
 {% block content %}
-    <h1>Nieuwe {{ type }} voor '{{ tool.name }}'</h1> <!-- aanpassen voor uitkomst -->
+    <h1>New {{ type }} for '{{ tool.name }}'</h1> <!-- aanpassen voor uitkomst -->
     <form action="" method="post">
         {% csrf_token %}
         <table class="mt-3 mb-3">

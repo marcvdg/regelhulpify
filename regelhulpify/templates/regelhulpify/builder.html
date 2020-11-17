@@ -1,9 +1,9 @@
 {% extends 'regelhulpify/base.html' %}
 
 {% block content %}
-    <h1 class="">Bouw een regelhulp...</h1>
-    <a href="{% url 'newtool' %}" class="btn btn-success mt-3">Nieuwe regelhulp</a>
-    <h3 class="mt-5">...of verbouw een bestaande</h3>
+    <h1 class="">Build a new Regelhulp...</h1>
+    <a href="{% url 'newtool' %}" class="btn btn-success mt-3">Get started!</a>
+    <h3 class="mt-5">...or edit an existing one</h3>
     <div>
         {% for tool in tools %}
         <li>

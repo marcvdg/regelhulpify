@@ -1,5 +1,6 @@
 from regelhulpify.models import Tool, Question, Answer
 from django.shortcuts import get_object_or_404, HttpResponse
+from django.http import Http404
 
 def reset_tool(tool):
     '''Reset the positioning of a tool's questions'''
@@ -43,3 +44,11 @@ def question_load_helper(question):
         'answers': answer_list
         }
     return question_dict
+
+def check_user_or_403(user):
+    if user != request.user:
+        raise Http404('Not the right user')
+    else:
+        return 1
+
+

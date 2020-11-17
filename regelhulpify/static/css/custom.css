@@ -21,6 +21,11 @@
   border-radius: 1em;
 }
 
+ul {
+  -webkit-padding-start: 20px;
+          padding-inline-start: 20px;
+}
+
 .log-button {
   margin-left: 0rem;
   margin-top: 0.5rem;

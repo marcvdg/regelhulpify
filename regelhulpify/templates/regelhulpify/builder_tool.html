@@ -6,16 +6,16 @@
 <h1 id="tool_name" class="text-muted"><!--JS--></h1>
 <p id="tool_desc" class="lead mt-4 mb-3"><!--JS--></p>    
 <div class="d-inline-block">
-<a href="{% url 'newquestion' tool.id 0 %}" class="btn btn-primary mt-2 mr-2">+ Nieuwe vraag</a>
-<a href="{% url 'newquestion' tool.id 1 %}" class="btn btn-primary mt-2 mr-2">+ Nieuwe uitkomst</a>
+<a href="{% url 'newquestion' tool.id 0 %}" class="btn btn-primary mt-2 mr-2">+ New question</a>
+<a href="{% url 'newquestion' tool.id 1 %}" class="btn btn-primary mt-2 mr-2">+ New result</a>
 </div>
 <div class="d-inline-block">
-<a href="{% url 'edittool' tool.id %}" class="btn btn-primary mt-2 mr-2">Tool aanpassen</a>
-<input type="button" class="btn btn-danger mt-2 mr-2" value="&#x2620; Tool verwijderen" id="tool_delete">
+<a href="{% url 'edittool' tool.id %}" class="btn btn-primary mt-2 mr-2">Edit tool</a>
+<input type="button" class="btn btn-danger mt-2 mr-2" value="&#x2620; Delete tool" id="tool_delete">
 </div>
 <div id="question_list"><!--JS--></div>
 
-<a href="{% url 'builder' %}" class="btn btn-light mt-5">&larr; Terug naar overzicht</a>
+<a href="{% url 'builder' %}" class="btn btn-light mt-5">&larr; Back to overview</a>
 
 <script src="{% static 'js/builder_tool.js' %}"></script>
 {% endblock %}
