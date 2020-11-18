@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 });
 
 function createToolsBtn(element){
-    console.log(element)
     // Create post
     const tool = document.createElement('div');
         tool.className = 'tool_link rounded my-3 p-3 bg-light';

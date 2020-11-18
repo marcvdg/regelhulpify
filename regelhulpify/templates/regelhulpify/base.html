@@ -30,7 +30,7 @@
                     <li class="nav-item dropdown order-1">
                         {% if user.is_authenticated %}
                         
-                    <a class="btn btn-outline-dark log-button" href="{% url 'logout' %}"> Logout</a>
+                    <a class="btn btn-outline-dark log-button" href="{% url 'logout' %}"> Logout {{ user.username }}</a>
                         {% else %}
                         <button type="button" id="dropdownMenu1" data-toggle="dropdown" class="btn btn-outline-dark dropdown-toggle log-button">Login <span class="caret"></span></button>
                         <ul class="dropdown-menu dropdown-menu-left mt-2">

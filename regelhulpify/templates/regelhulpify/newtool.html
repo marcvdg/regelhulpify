@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1>New Regelhulp</h1>
-    <form action="" method="post">
+    <form action="{% url 'newtool' %}" method="post">
         {% csrf_token %}
         <table class="mt-3 mb-3">
           {% for field in form %}
@@ -11,16 +11,20 @@
               <td class="align-top">{{ field.label_tag }}</td>
               <td>
                   {{ field }}
-                  {{ field.errors }}
-                  {% if field.help_text %}
-                  <img class="tooltip" title="{{ field.help_text }}" src="{{ MEDIA_URL }}images/icon_help.png">
-                  {% endif %}
               </td>
           </tr>
+          {% if field.help_text or field.errors %}
+          <tr class="mb-2">
+              <td></td>
+              <td class="small">{{ field.errors }}<span class="text-muted">{{ field.help_text }}</span></td>
+          </tr>
+          {% endif %}
+          {% else %}
+            {{ field }}
           {% endif %}
           {% endfor %}
         </table>
-        <input type="submit" value="Maak nieuwe regelhulp" class="btn btn-success">
+        <input type="submit" value="Create new regelhulp" class="btn btn-success">
       </form>
 {% endblock %}
 

@@ -35,7 +35,7 @@ function writeQuestion(element){
     // Write line
     const question = document.createElement('div');
     question.className = 'question-name rh-box rounded bg-light p-2 my-3';
-    let r_label = element.result ? '<div class="text-muted small">Uitkomst </div>' : '';
+    let r_label = element.result ? '<div class="text-muted small">Result </div>' : '';
     question.id = `q_${element.pk}`
     let answer_html = ''
     // Create answer lines
@@ -43,7 +43,7 @@ function writeQuestion(element){
         element.answers.forEach(a => {
             answer_html += `<li><a href="/builder/${element.tool}/${element.id}/${a.id}"><span class="text-muted">${a.text.replace(/"|'/g, '&apos;')} &rarr; ${a.nexttext.replace(/"|'/g, '&apos;')}</span></a></li>`
         });
-        answer_html += `<li><a class="text-muted" href="/builder/${element.tool}/${element.id}/newanswer">Nieuw antwoord...</a></li>`;
+        answer_html += `<li><a class="text-muted" href="/builder/${element.tool}/${element.id}/newanswer">New answer...</a></li>`;
     }
     question.innerHTML = `${r_label}<a href="/builder/${element.tool}/${element.id}" class="mt-4 pr-5">${element.text.replace(/"|'/g, '&apos;')}</a>
                         
@@ -74,7 +74,7 @@ function getTool() {
             writeQuestion(element); 
         })
     })
-    .catch(() => {document.querySelector('#tool_name').innerHTML = "Jammer :(";}
+    .catch(() => {document.querySelector('#tool_name').innerHTML = "Error :(";}
 
     )
 

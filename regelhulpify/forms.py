@@ -9,13 +9,14 @@ class ToolForm(ModelForm):
         fields = ['name', 'desc', 'img', 'shorturl', 'owner']
         widgets = {'owner': HiddenInput()}
         labels = {
-            "name": "Naam",
-            "desc": "Beschrijving",
-            "img": "Afbeelding (link)",
-            "shorturl": "Korte url",
+            "name": "Name",
+            "desc": "Description",
+            "img": "Image (link)",
+            "shorturl": "Short url",
         }
         help_texts = {
-            'img': _('Make sure the link ends with .jpg of .png.'),
+            'img': _('Optional. Make sure the link ends with .jpg of .png.'),
+            'shorturl': _('Optional. Lowercast only.')
         }
 
 class QuestionForm(ModelForm):
@@ -24,8 +25,11 @@ class QuestionForm(ModelForm):
         fields = ['text','expl','tool','position', 'result']
         widgets = {'tool': HiddenInput(), 'position': HiddenInput(), 'result': HiddenInput()}
         labels = {
-        "text": "Tekst",
-        "expl": "Toelichting",
+        "text": "Text",
+        "expl": "Explanation",
+        }
+        help_texts = {
+            'expl': _('Optional.'),
         }
 
 class AnswerForm(ModelForm):
@@ -34,8 +38,11 @@ class AnswerForm(ModelForm):
         fields = ['text','nextquestion', 'question']
         widgets = {'question': HiddenInput()}
         labels = {
-        "text": "Tekst",
-        "nextquestion": "Volgende vraag",
+        "text": "Text",
+        "nextquestion": "Next question",
+        }
+        help_texts = {
+            'nextquestion': _('Optional. Use for logic once you have created all questions & results.'),
         }
 
     def __init__(self, tool, *args, **kwargs):

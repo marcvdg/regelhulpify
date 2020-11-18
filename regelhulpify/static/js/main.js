@@ -11,19 +11,19 @@ function deleteItem(type, id, nextAction, arg = ''){
     let url = '';
     switch (type) {
         case 'tool':
-            elementText = 'deze tool';
+            elementText = 'tool';
             url = '/api/tool_delete/' + id + '/'
             break;
         case 'question':
-            elementText = 'deze vraag';
+            elementText = 'question';
             url = '/api/question_delete/' + id + '/'
             break;
         case 'result':
-            elementText = 'deze uitkomst';
+            elementText = 'result';
             url = '/api/question_delete/' + id + '/'
             break;    
         case 'answer':
-            elementText = 'dit antwoord';
+            elementText = 'answer';
             url = '/api/answer_delete/' + id + '/'
             break;
 
@@ -33,12 +33,11 @@ function deleteItem(type, id, nextAction, arg = ''){
         url,
         {headers: {'X-CSRFToken': csrftoken}}
     ); 
-    if (confirm(`Weet je zeker dat ${elementText} geen joy sparkt?`)) {
+    if (confirm(`Are you sure that this ${elementText} doesn't spark joy?`)) {
         fetch(request, {
             method: 'DELETE',
             mode: 'same-origin',
             })
-        .then(() => console.log('whuuut'))
         .then(() => nextAction(arg))
         } else {
             console.log('Dan niet.');

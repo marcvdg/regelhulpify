@@ -39,6 +39,7 @@ def newtool(request):
             # redirect to a new URL:
             return HttpResponseRedirect(reverse('builder'))
         else:
+            print(form.errors)
             context = {'form': form}
         return render(request, 'regelhulpify/newtool.html', context)
     else:        
