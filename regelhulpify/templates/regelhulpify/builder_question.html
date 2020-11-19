@@ -7,10 +7,7 @@
     <h1 class="">Edit {% if question.result == False %}question{% else %}result{% endif %}</h1>
     <div class="mb-5">
         <form action="" method="post">
-            {% csrf_token %}
-            <table class="mt-3 mb-3">
-            {{ form.as_table }}
-            </table>
+            {% include 'regelhulpify/form_snippet.html' %}
             <input type="submit" value="Save changes" class="btn btn-primary">
         </form>
     </div>

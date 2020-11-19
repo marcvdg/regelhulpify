@@ -131,7 +131,7 @@ def newanswer(request, tool, question):
             context = {'form': form, 'tool': t}
             return render(request, 'regelhulpify/newquestion.html', context)
     else:               
-        form = AnswerForm(t, initial={'question': q})  
+        form = AnswerForm(t, q, initial={'question': q})  
         context = {'form': form, 'tool': t, 'question': q}
         return render(request, 'regelhulpify/newanswer.html', context)
 
@@ -148,7 +148,7 @@ def builder_answer(request, tool, question, answer):
         else:
             context = {'form': form, 'tool': t, 'question': q, 'answer': a}
             return render(request, 'regelhulpify/builder_question.html', context)
-    form = AnswerForm(t, instance=a)  
+    form = AnswerForm(t, q, instance=a)  
     context = {'form': form, 'tool': t, 'question': q, 'answer': a}
     return render(request, 'regelhulpify/builder_answer.html', context)
 

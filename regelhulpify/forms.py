@@ -19,6 +19,11 @@ class ToolForm(ModelForm):
             'shorturl': _('Optional. Lowercast only.')
         }
 
+    def __init__(self, *args, **kwargs):
+        super(ToolForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+
 class QuestionForm(ModelForm):
     class Meta:
         model = Question
@@ -32,6 +37,11 @@ class QuestionForm(ModelForm):
             'expl': _('Optional.'),
         }
 
+    def __init__(self, *args, **kwargs):
+        super(QuestionForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+
 class AnswerForm(ModelForm):
     class Meta:
         model = Answer
@@ -39,16 +49,18 @@ class AnswerForm(ModelForm):
         widgets = {'question': HiddenInput()}
         labels = {
         "text": "Text",
-        "nextquestion": "Next question",
+        "nextquestion": "Next question or result",
         }
         help_texts = {
             'nextquestion': _('Optional. Use for logic once you have created all questions & results.'),
         }
 
-    def __init__(self, tool, *args, **kwargs):
+    def __init__(self, tool, question, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)
-        self.fields['nextquestion'].queryset = Question.objects.filter(tool=tool)
- 
+        current = question.position
+        self.fields['nextquestion'].queryset = Question.objects.filter(tool=tool).filter(position__gt=question.position)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
     
 
        
