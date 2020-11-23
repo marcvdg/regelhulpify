@@ -11,7 +11,6 @@ urlpatterns = [
     path("builder/<int:tool>/<int:question>/", views.builder_question, name="builder_question"),
     path("builder/<int:tool>/<int:question>/newanswer/", views.newanswer, name="newanswer"),
     path("builder/<int:tool>/<int:question>/<int:answer>/", views.builder_answer, name="builder_answer"), 
-    #path("builder/answer/<int:answer>", views.builder_answer, name="builder_answer"), 
     path("<int:tool>/", views.tool, name="tool"),
     path("<int:tool>/<int:question>", views.question, name="question"),
     path("api/get_tools/", views.get_tools, name="get_tools"),
@@ -22,7 +21,4 @@ urlpatterns = [
     path("api/question_move/<int:question>/<str:direction>/", views.question_move, name="question_move"),
     path("api/question_delete/<int:question>/", views.question_delete, name="question_delete"),
     path("api/answer_delete/<int:answer>/", views.answer_delete, name="answer_delete"),
-    #path("login/<str:origin>", views.login_view, name="login"),
-    #path("login_page/", views.login_page, name="login_page"),
-    #path("logout/", views.logout_view, name="logout"),
 ]

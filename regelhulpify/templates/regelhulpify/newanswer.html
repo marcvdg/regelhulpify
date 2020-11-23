@@ -4,7 +4,7 @@
     <h1>New answer for '{{ question.text }}'</h1>
     <form action="" method="post">
         {% include 'regelhulpify/form_snippet.html' %}
-        <input type="submit" value="Antwoord opslaan" class="btn btn-success">
+        <input type="submit" value="Save {{ type }}" class="btn btn-success">
       </form>
 {% endblock %}
 

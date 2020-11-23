@@ -6,7 +6,31 @@
         
         <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="{% static 'js/main.js' %}"></script>
+
+        <!-- generics -->
+        <link rel="icon" href="static/img/favicon-32.png" sizes="32x32">
+        <link rel="icon" href="static/img/favicon-57.png" sizes="57x57">
+        <link rel="icon" href="static/img/favicon-76.png" sizes="76x76">
+        <link rel="icon" href="static/img/favicon-96.png" sizes="96x96">
+        <link rel="icon" href="static/img/favicon-128.png" sizes="128x128">
+        <link rel="icon" href="static/img/favicon-192.png" sizes="192x192">
+        <link rel="icon" href="static/img/favicon-228.png" sizes="228x228">
+
+        <!-- Android -->
+        <link rel="shortcut icon" sizes="196x196" href=“static/img/favicon-196.png">
+
+        <!-- iOS -->
+        <link rel="apple-touch-icon" href="static/img/favicon-120.png" sizes="120x120">
+        <link rel="apple-touch-icon" href="path/to/favicon-152.png" sizes="152x152">
+        <link rel="apple-touch-icon" href="path/to/favicon-180.png" sizes="180x180">
+
+        <!-- Windows 8 IE 10 -->
+        <meta name="msapplication-TileColor" content="#ff6600">
+        <meta name="msapplication-TileImage" content="static/img/favicon-144.png">
+
+        <!-- Windows 8.1 + IE11 and above -->
+        <meta name="msapplication-config" content="static/img/browserconfig.xml" />
+
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -52,11 +76,18 @@
                 </ul>
             </div>
         </nav>
-
         <div class="content container mt-5 pb-5">
             <div class="row">
                 <div class="col-md-2"></div>
                 <div class="col-md-8">
+                    <!-- Snackbar -->
+                    {% if messages %}
+                        <div class="messages">
+                            {% for message in messages %}
+                            <div class="{{ message.tags }}">{{ message }}</li>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                     {% block content %}
                     {% endblock %}
                 </div>
@@ -64,5 +95,6 @@
         </div>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script> 
+        <script src="{% static 'js/main.js' %}"></script>
     </body>
 </html>

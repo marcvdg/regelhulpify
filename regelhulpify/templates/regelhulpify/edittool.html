@@ -1,8 +1,8 @@
 {% extends 'regelhulpify/base.html' %}
 
 {% block content %}
-  <h1>Tool aanpassen</h1>
-  <form action="edittool" method="post">
+  <h1>Edit tool</h1>
+  <form action="{% url 'edittool' tool %}" method="post">
     {% include 'regelhulpify/form_snippet.html' %}
     <input type="submit" value="Confirm changes" class="btn btn-success">
   </form>

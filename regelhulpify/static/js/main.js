@@ -1,8 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
-
-    console.log("joe")  
-
+    
+    $(".toast").toast({ delay:2000 });
+    $(".toast").toast('show');
 })
+
+function showSnackbar() {
+    // Get the snackbar DIV
+    const sb = document.querySelector("#snackbar");
+    sb.classList.add("show");
+
+    // After 3 seconds, remove the show class from DIV
+     setTimeout(()=>{ sb.classList.remove("show"); }, 5000);   
+}
 
 function deleteItem(type, id, nextAction, arg = ''){
     console.log(nextAction.this)

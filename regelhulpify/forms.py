@@ -3,6 +3,7 @@ from regelhulpify.models import Tool, Question, Answer
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
+
 class ToolForm(ModelForm):
     class Meta:
         model = Tool
@@ -20,6 +21,7 @@ class ToolForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        kwargs.setdefault('label_suffix', '') 
         super(ToolForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
@@ -38,6 +40,7 @@ class QuestionForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        kwargs.setdefault('label_suffix', '') 
         super(QuestionForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
@@ -55,10 +58,10 @@ class AnswerForm(ModelForm):
             'nextquestion': _('Optional. Use for logic once you have created all questions & results.'),
         }
 
-    def __init__(self, tool, question, *args, **kwargs):
+    def __init__(self, tool, position, *args, **kwargs):
+        kwargs.setdefault('label_suffix', '') 
         super(ModelForm, self).__init__(*args, **kwargs)
-        current = question.position
-        self.fields['nextquestion'].queryset = Question.objects.filter(tool=tool).filter(position__gt=question.position)
+        self.fields['nextquestion'].queryset = Question.objects.filter(tool=tool).filter(position__gt=position)
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
     

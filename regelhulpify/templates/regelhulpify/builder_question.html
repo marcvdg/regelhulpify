@@ -23,12 +23,13 @@
             </ul>
         </div>
     
+    <a href="{% url 'builder_tool' tool.id %}" class="btn btn-light mt-5">&larr; Back to tool</a>
     <input type="button" id='question_delete' class="btn btn-danger mt-5" value='Delete question'>
     {% else %}
+    <a href="{% url 'builder_tool' tool.id %}" class="btn btn-light mt-5">&larr; Back to tool</a>
     <input type="button" id='result_delete' class="btn btn-danger mt-5" value='Delete result'>
     {% endif %}
     
-    <a href="{% url 'builder_tool' tool.id %}" class="btn btn-light mt-5">Back to tool</a>
 
     <script src="{% static 'js/builder_question.js' %}"></script>
     

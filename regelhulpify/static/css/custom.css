@@ -26,6 +26,10 @@ ul {
           padding-inline-start: 20px;
 }
 
+.form-group label {
+  margin-bottom: 0.2rem;
+}
+
 .log-button {
   margin-left: 0rem;
   margin-top: 0.5rem;

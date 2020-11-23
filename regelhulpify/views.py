@@ -6,13 +6,14 @@ from django.db.models import Max
 from django.urls import reverse
 from django.core.serializers import serialize
 from django.forms.models import model_to_dict
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 from regelhulpify.models import Tool, Question, Answer, User
 from regelhulpify.forms import ToolForm, QuestionForm, AnswerForm
-from regelhulpify.util import reset_tool, question_load_helper, check_user_or_403
+from regelhulpify.util import reset_tool, question_load_helper
 from regelhulpify.context_processors import login_form
 
 def home(request):
@@ -23,9 +24,6 @@ def home(request):
 @login_required
 def builder(request):
     t = Tool.objects.filter(owner=request.user)
-    for tool in t:
-        print(tool.owner)
-    
     context = {'tools': t}
     return render(request, 'regelhulpify/builder.html', context)
 
@@ -35,9 +33,10 @@ def newtool(request):
         form = ToolForm(request.POST)
         if form.is_valid():
             # process the data in form.cleaned_data as required
-            form.save()
+            new_t = form.save()
             # redirect to a new URL:
-            return HttpResponseRedirect(reverse('builder'))
+            messages.success(request, 'Tool created successfully!', extra_tags='alert alert-success')
+            return redirect('builder_tool', new_t.pk)
         else:
             print(form.errors)
             context = {'form': form}
@@ -49,57 +48,74 @@ def newtool(request):
 
 @login_required
 def edittool(request, tool):
+    ''' Lets you edit details of an existing tool '''
     t = get_object_or_404(Tool, id=tool)
+    # Check for ownership
     if t.owner != request.user:
         return HttpResponseForbidden('Not your tool.')
+    
+    # If post, check form
     if request.method == 'POST':
         form = ToolForm(request.POST, instance=t)
         if form.is_valid():
-            # process the data in form.cleaned_data as required
             form.save()
-            # redirect to a new URL:
-            return HttpResponseRedirect(reverse('builder'))
+            return redirect('builder_tool', tool)
         else:
-            context = {'form': form}
-        return render(request, 'regelhulpify/newtool.html', context)
+            context = {'form': form, 'tool': tool}
+            return render(request, 'regelhulpify/edittool.html', context)
     else:        
         form = ToolForm(instance=t)
-        context = {'form': form}
+        context = {'form': form, 'tool': tool}
         return render(request, 'regelhulpify/edittool.html', context)
 
 @login_required
 def builder_tool(request, tool):
     t = get_object_or_404(Tool, id=tool)
-    q = Question.objects.order_by("position").filter(tool=t) # overbodig tot API
+    
+    # Check for ownership
+    if t.owner != request.user:
+        return HttpResponseForbidden('Not your tool.')
+
+    q = Question.objects.order_by("position").filter(tool=t) 
     a = Answer.objects.filter(question=q)
-    print(q)
     context = {'tool': t, 'questions': q, 'answers': a}
     return render(request, 'regelhulpify/builder_tool.html', context)
 
 @login_required
 def newquestion(request, tool, result=0):
     t = get_object_or_404(Tool, id=tool)
+    if t.owner != request.user:
+        return HttpResponseForbidden('Not your tool.')
+    # If method POST, try and save result
     if request.method == 'POST':
         form = QuestionForm(request.POST)
         if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('builder_tool', args=[tool]))
+            new_q = form.save()
+            return redirect('builder_tool', tool)
+            # return HttpResponseRedirect(reverse('builder_question', args=[tool, new_q.pk]))
         else:
+            # If errors, display form with previous POST input
             context = {'form': form, 'tool': t}
             return render(request, 'regelhulpify/newquestion.html', context)
     else:               
-        # Set position
+        # Set position...
         highest = t.question_set.aggregate(Max('position')).get('position__max') or 0
         p = highest + 1
         form = QuestionForm(initial={'tool' : t, 'position': p, 'result': result})  
 
-        r = 'vraag' if result == 0 else 'uitkomst'
+        # Set type...
+        r = 'question' if result == 0 else 'result'
         context = {'form': form, 'tool': t, 'type': r}
+
+        # ...and display form
         return render(request, 'regelhulpify/newquestion.html', context)
 
 @login_required
 def builder_question(request, tool, question):
     t = get_object_or_404(Tool, id=tool)
+    if t.owner != request.user:
+        return HttpResponseForbidden('Not your tool.')
+    
     q = Question.objects.get(tool=t, pk=question) 
     a = Answer.objects.filter(question=q)
     if request.method == 'POST':
@@ -121,9 +137,12 @@ def builder_question(request, tool, question):
 @login_required
 def newanswer(request, tool, question):
     t = get_object_or_404(Tool, id=tool)
+    if t.owner != request.user:
+        return HttpResponseForbidden('Not your tool.')
+
     q = Question.objects.get(tool=t, pk=question) 
     if request.method == 'POST':
-        form = AnswerForm(t, request.POST)
+        form = AnswerForm(t, q.position, request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('builder_question', args=[tool, question]))
@@ -131,24 +150,28 @@ def newanswer(request, tool, question):
             context = {'form': form, 'tool': t}
             return render(request, 'regelhulpify/newquestion.html', context)
     else:               
-        form = AnswerForm(t, q, initial={'question': q})  
+        form = AnswerForm(t, q.position, initial={'question': q})  
         context = {'form': form, 'tool': t, 'question': q}
         return render(request, 'regelhulpify/newanswer.html', context)
 
 @login_required
 def builder_answer(request, tool, question, answer):
+    t = get_object_or_404(Tool, pk=tool) 
+    if t.owner != request.user:
+        return HttpResponseForbidden('Not your tool.')
+    
     a = get_object_or_404(Answer, pk=answer)
     q = get_object_or_404(Question, pk=a.question.id) 
-    t = get_object_or_404(Tool, pk=q.tool.id) 
+
     if request.method == 'POST':
-        form = AnswerForm(t, request.POST, instance=a)
+        form = AnswerForm(t, q.position, request.POST, instance=a)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('builder_question', args=[t.id, q.id]))
         else:
             context = {'form': form, 'tool': t, 'question': q, 'answer': a}
             return render(request, 'regelhulpify/builder_question.html', context)
-    form = AnswerForm(t, q, instance=a)  
+    form = AnswerForm(t, q.position, instance=a)  
     context = {'form': form, 'tool': t, 'question': q, 'answer': a}
     return render(request, 'regelhulpify/builder_answer.html', context)
 
