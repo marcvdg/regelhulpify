@@ -1,14 +1,25 @@
-from django.forms import ModelForm, HiddenInput
+from django.forms import ModelForm, HiddenInput, Textarea
 from regelhulpify.models import Tool, Question, Answer
-from django import forms
 from django.utils.translation import gettext_lazy as _
+from django_registration.forms import RegistrationForm
+
+
+class RhRegistrationForm(RegistrationForm):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('label_suffix', '') 
+        super(RhRegistrationForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
 
 
 class ToolForm(ModelForm):
     class Meta:
         model = Tool
         fields = ['name', 'desc', 'img', 'shorturl', 'owner']
-        widgets = {'owner': HiddenInput()}
+        widgets = {
+            'owner': HiddenInput(),
+            'desc': Textarea(attrs={'rows': 3})
+        }
         labels = {
             "name": "Name",
             "desc": "Description",
@@ -30,10 +41,15 @@ class QuestionForm(ModelForm):
     class Meta:
         model = Question
         fields = ['text','expl','tool','position', 'result']
-        widgets = {'tool': HiddenInput(), 'position': HiddenInput(), 'result': HiddenInput()}
+        widgets = {
+            'tool': HiddenInput(), 
+            'position': HiddenInput(), 
+            'result': HiddenInput(),
+            'expl': Textarea(attrs={'rows': 3}),
+        }
         labels = {
-        "text": "Text",
-        "expl": "Explanation",
+            "text": "Text",
+            "expl": "Explanation",
         }
         help_texts = {
             'expl': _('Optional.'),
@@ -49,10 +65,12 @@ class AnswerForm(ModelForm):
     class Meta:
         model = Answer
         fields = ['text','nextquestion', 'question']
-        widgets = {'question': HiddenInput()}
+        widgets = {
+            'question': HiddenInput(),
+        }
         labels = {
-        "text": "Text",
-        "nextquestion": "Next question or result",
+            "text": "Text",
+            "nextquestion": "Next question or result",
         }
         help_texts = {
             'nextquestion': _('Optional. Use for logic once you have created all questions & results.'),

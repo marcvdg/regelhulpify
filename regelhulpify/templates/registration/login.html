@@ -4,8 +4,8 @@
 
 <div class="card px-4 pt-4 pb-3">
     <form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
-        {{ form.as_p }}
+        {% include 'regelhulpify/form_snippet.html' %}
+     
         <input type="submit" class="btn btn-primary" value="Log in">
     </form>
 </div>

@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-    <p class='mt-4 mb-4 text-muted'>> {{tool.name}} > {{question.text}} > {{answer.text}} </p>
+{% include 'regelhulpify/breadcrumb_snippet.html' %}
     <h1 class="">Edit answer</h1>
     <div>
         <form action="" method="post">

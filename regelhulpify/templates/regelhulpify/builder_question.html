@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-    <p class='mt-4 mb-4 text-muted'>> {{tool.name}} > {{question.text}}</p>
+    {% include 'regelhulpify/breadcrumb_snippet.html' %}
     <!-- <h1 class="">{% if question.result == False %}Vraag{% else %}Uitkomst{% endif %} aanpassen</h1> -->
     <h1 class="">Edit {% if question.result == False %}question{% else %}result{% endif %}</h1>
     <div class="mb-5">

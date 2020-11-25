@@ -1,0 +1,15 @@
+{% if tool %}
+
+<nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'builder' %}">Builder</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'builder_tool' tool.id %}">{{ tool.name }}</a></li>
+        {% if question %}
+        <li class="breadcrumb-item"><a href="{% url 'builder_question' tool.id question.id %}">{{ question.text }}</a></li>
+        {% if answer %}
+        <li class="breadcrumb-item active" aria-current="page">{{ answer.text }}</li>
+      {% endif %}
+      {% endif %}
+    </ol>
+  </nav>
+  {% endif %}
