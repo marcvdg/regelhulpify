@@ -1,0 +1,19 @@
+{% extends 'regelhulpify/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>New answers for '{{ question.text }}'</h1>
+
+    <form action="" method="POST"></form>
+        <div id="formzone"> </div>
+    
+        <input id="answer_add" type="button" value="Add answer" class="btn btn-light w-100 mb-2">
+        <input id="answer_submit" type="submit" value="Save" class="btn btn-success">
+    </form>
+      <a href="{% url 'builder_question' tool.id question.id %}" class="btn btn-light">&larr; Back to question</a>
+
+      <script src="{% static 'js/newanswers.js' %}"></script>
+{% endblock %}
+
+
+

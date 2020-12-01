@@ -53,7 +53,7 @@ class Question(models.Model):
 
 class Answer(models.Model):
     text = models.CharField(max_length=128)
-    resulttext = models.CharField(max_length=256, blank=True)
+    resulttext = models.CharField(max_length=256, blank=True) # for later use
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     nextquestion = models.ForeignKey(Question, on_delete=models.SET_DEFAULT, null=True, default="", blank=True, related_name='comesfrom')
 

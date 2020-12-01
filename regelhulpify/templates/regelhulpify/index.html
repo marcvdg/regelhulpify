@@ -5,19 +5,16 @@
     <h1 class="mb-4">
         Welcome to Regelhulpify
     </h1>
-    <p class="lead mb-2">Regelhulpify helps you make interactive 'Regelhulpen': tools that help people understand how rules and regulations apply to their situation. Find previously made tools below, or {% if user.is_authenticated %}<a href="{% url 'builder' %}">start building</a>!{% else %}<a href="{% url 'django_registration_register' %}">register</a> or <a href="{% url 'login' %}">log in</a> to start making them yourself.{% endif %}</p>
+    <p class="lead mb-2">Regelhulpify helps you make interactive 'Regelhulpen': tools that help people understand how rules and regulations apply to their situation. Find previously made tools on the <a href="{% url 'alltools' %}">'All tools' page</a>, or {% if user.is_authenticated %}<a href="{% url 'builder' %}">start building</a>!{% else %}<a href="{% url 'django_registration_register' %}">register</a> or <a href="{% url 'login' %}">log in</a> to start making them yourself.{% endif %}</p>
     <div>
         <img class="img-fluid" src="{% static 'img/undraw_User_flow_re_bvfx.png' %}" alt="">
     </div>
-    <hr/>
-    <h2>
-        All tools
-    </h2>
-    <div id="tools_list">
-        <ul>
-            <!-- Javascript filled -->
-        </ul>
-    </div>
+<hr>
+<h2>Latest tools</h2>
+<div id="tools_list">
+    <ul>
+        <!-- Javascript filled -->
+    </ul>
 </div>
 
 <script src="{% static 'js/index.js' %}"></script>

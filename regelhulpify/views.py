@@ -16,9 +16,29 @@ from regelhulpify.forms import ToolForm, QuestionForm, AnswerForm
 from regelhulpify.util import reset_tool, question_load_helper
 from regelhulpify.context_processors import login_form
 
+# FRONT
+
 def home(request):
     return render(request, 'regelhulpify/index.html')
 
+def alltools(request):
+    return render(request, 'regelhulpify/alltools.html')
+
+def tool(request, tool):
+    t = get_object_or_404(Tool, id=tool)
+    context = {'tool': t}
+    return render(request, 'regelhulpify/tool.html', context)
+
+def toolslug(request, slug):
+    try: 
+        t = Tool.objects.get(shorturl=slug)
+    except:
+        return redirect('home')
+    return redirect('tool', t.pk)
+
+def question(request, tool, question):
+    return render(request, 'regelhulpify/question.html')
+    
 # BUILDER
 
 @login_required
@@ -91,7 +111,9 @@ def newquestion(request, tool, result=0):
         form = QuestionForm(request.POST)
         if form.is_valid():
             new_q = form.save()
-            return redirect('builder_tool', tool)
+            if new_q.result:
+                return redirect('builder_tool', tool)
+            return redirect('newanswers', tool, new_q.pk)
             # return HttpResponseRedirect(reverse('builder_question', args=[tool, new_q.pk]))
         else:
             # If errors, display form with previous POST input
@@ -145,7 +167,7 @@ def newanswer(request, tool, question):
         form = AnswerForm(t, q.position, request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('builder_question', args=[tool, question]))
+            return redirect('builder_question', question)
         else:
             context = {'form': form, 'tool': t}
             return render(request, 'regelhulpify/newquestion.html', context)
@@ -153,6 +175,17 @@ def newanswer(request, tool, question):
         form = AnswerForm(t, q.position, initial={'question': q})  
         context = {'form': form, 'tool': t, 'question': q}
         return render(request, 'regelhulpify/newanswer.html', context)
+
+@login_required
+def newanswers(request, tool, question):
+    t = get_object_or_404(Tool, id=tool)
+    if t.owner != request.user:
+        return HttpResponseForbidden('Not your tool.')
+    q = Question.objects.get(tool=t, pk=question) 
+    if request.method == 'POST':
+        print(request.POST)
+    context = {'tool': t, 'question': q}
+    return render(request, 'regelhulpify/newanswers.html', context)
 
 @login_required
 def builder_answer(request, tool, question, answer):
@@ -176,22 +209,7 @@ def builder_answer(request, tool, question, answer):
     return render(request, 'regelhulpify/builder_answer.html', context)
 
 
-# FRONT
 
-def tool(request, tool):
-    t = get_object_or_404(Tool, id=tool)
-    context = {'tool': t}
-    return render(request, 'regelhulpify/tool.html', context)
-
-def toolslug(request, slug):
-    try: 
-        t = Tool.objects.get(shorturl=slug)
-    except:
-        return redirect('home')
-    return redirect('tool', t.pk)
-
-def question(request, tool, question):
-    return render(request, 'regelhulpify/question.html')
 
 # API paths
 
@@ -283,9 +301,45 @@ def answer_delete(request, answer):
     else:
         return HttpResponse(status=403)  
 
+# def answer_add(request, question):
+#     if request.method == "POST":
+#         a = get_object_or_404(Answer, pk=answer)
+#         a.delete()
+#         return HttpResponse(status=200)  
+#     else:
+#         return HttpResponse(status=403)  
 
+def answer_getnext(request, question):
+    ''' Load all 'next question' options for answer form '''
+    if request.method == "GET":
+        q = get_object_or_404(Question, pk=question)
+        t = q.tool
+        next_set = Question.objects.filter(tool=t).filter(position__gt=q.position).all()
+        next_list = []
+        for item in next_set:
+            next_list.append({ 'pk': item.pk, 'text': item.text })
 
+        return JsonResponse(next_list, safe=False)    
+    else:
+        return HttpResponse(status=403)  
 
+def answers_add(request, question):
+    ''' Add q '''
+    if request.method == "POST":
+        q = get_object_or_404(Question, pk=question)
+        t = q.tool
+        data = json.loads(request.body)
+        for item in data['data']:
+            a = Answer(text=item['text'], question=q)
+            if item['nextquestion'] != '':
+                nq = get_object_or_404(Question, pk=item['nextquestion'])
+                a = Answer(nextquestion=nq)
+            a.save()
+      
+
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=403)  
 
     
 

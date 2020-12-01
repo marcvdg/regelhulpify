@@ -34,6 +34,7 @@ class ToolForm(ModelForm):
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('label_suffix', '') 
         super(ToolForm, self).__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs['autofocus'] = 'on'
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
 
@@ -58,6 +59,7 @@ class QuestionForm(ModelForm):
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('label_suffix', '') 
         super(QuestionForm, self).__init__(*args, **kwargs)
+        self.fields['text'].widget.attrs['autofocus'] = 'on'
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
 
@@ -79,6 +81,7 @@ class AnswerForm(ModelForm):
     def __init__(self, tool, position, *args, **kwargs):
         kwargs.setdefault('label_suffix', '') 
         super(ModelForm, self).__init__(*args, **kwargs)
+        self.fields['text'].widget.attrs['autofocus'] = 'on'
         self.fields['nextquestion'].queryset = Question.objects.filter(tool=tool).filter(position__gt=position)
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'

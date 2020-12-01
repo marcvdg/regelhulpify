@@ -8,16 +8,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <!-- generics -->
-        <link rel="icon" href="static/img/favicon-32.png" sizes="32x32">
-        <link rel="icon" href="static/img/favicon-57.png" sizes="57x57">
-        <link rel="icon" href="static/img/favicon-76.png" sizes="76x76">
-        <link rel="icon" href="static/img/favicon-96.png" sizes="96x96">
-        <link rel="icon" href="static/img/favicon-128.png" sizes="128x128">
-        <link rel="icon" href="static/img/favicon-192.png" sizes="192x192">
-        <link rel="icon" href="static/img/favicon-228.png" sizes="228x228">
+        <link rel="icon" href="/static/img/favicon-32.png" sizes="32x32">
+        <link rel="icon" href="/static/img/favicon-57.png" sizes="57x57">
+        <link rel="icon" href="/static/img/favicon-76.png" sizes="76x76">
+        <link rel="icon" href="/static/img/favicon-96.png" sizes="96x96">
+        <link rel="icon" href="/static/img/favicon-128.png" sizes="128x128">
+        <link rel="icon" href="/static/img/favicon-192.png" sizes="192x192">
+        <link rel="icon" href="/static/img/favicon-228.png" sizes="228x228">
 
         <!-- Android -->
-        <link rel="shortcut icon" sizes="196x196" href=“static/img/favicon-196.png">
+        <link rel="shortcut icon" sizes="196x196" href=“/static/img/favicon-196.png">
 
         <!-- iOS -->
         <link rel="apple-touch-icon" href="static/img/favicon-120.png" sizes="120x120">
@@ -43,6 +43,8 @@
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li><li class="nav-item">
+                        <a class="nav-link" href="{% url 'alltools' %}">All tools</a>
                     </li>
                     <li class="nav-item">
                     {% if user.is_authenticated %}

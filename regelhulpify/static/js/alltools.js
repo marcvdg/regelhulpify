@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', (event) => {
-    getLatestTools();
+    getAllTools();
 });
 
-function getLatestTools() {
+function getAllTools() {
     // Fetch them tools
     fetch(`/api/get_tools`)
     .then(response => response.json())
@@ -10,8 +10,7 @@ function getLatestTools() {
         const tools = JSON.parse(result);
         // Reset
         document.querySelector('#tools_list').innerHTML = "";
-        const last3 = tools.splice(-3);
-        last3.forEach(element => {
+        tools.forEach(element => {
             createToolsBtn(element)
         });   
     });

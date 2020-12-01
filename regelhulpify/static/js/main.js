@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
-    $(".toast").toast({ delay:2000 });
-    $(".toast").toast('show');
+
 })
 
 function showSnackbar() {
@@ -11,6 +9,23 @@ function showSnackbar() {
 
     // After 3 seconds, remove the show class from DIV
      setTimeout(()=>{ sb.classList.remove("show"); }, 5000);   
+}
+
+function createToolsBtn(element){
+    // Create post
+    const tool = document.createElement('div');
+        tool.className = 'tool_link rounded my-3 p-3 bg-light';
+        tool.id = element.id
+        tool.innerHTML = `<a href="/${element.pk}" class="btn btn-primary mt-2 mb-2">
+            ${element.fields.name}
+            </a>
+            <div class="">${element.fields.desc}</div>`
+        if (element.fields.img != null){
+            tool.style.background = `linear-gradient(to right, rgba(248,249,250,1) 30%,
+                rgba(248,249,250,0)), url(${element.fields.img})`;
+            tool.style.backgroundSize = 'cover';
+        }
+        document.querySelector('#tools_list').append(tool)
 }
 
 function deleteItem(type, id, nextAction, arg = ''){

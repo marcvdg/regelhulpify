@@ -4,7 +4,7 @@
     <h1>New {{ type }} for '{{ tool.name }}'</h1> <!-- aanpassen voor uitkomst -->
     <form action="" method="post">
       {% include 'regelhulpify/form_snippet.html' %}
-        <input type="submit" value="Save {{ type }}" class="btn btn-success">
+        <input type="submit" value="Save {{ type }}{% if type == 'question' %} and add answers {% endif %}" class="btn btn-success">
       </form>
       <a href="{% url 'builder_tool' tool.id %}" class="btn btn-light">&larr; Back to tool</a>
 {% endblock %}
