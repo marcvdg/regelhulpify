@@ -134,6 +134,7 @@ def newquestion(request, tool, result=0):
 
 @login_required
 def builder_question(request, tool, question):
+    ''' Lets user view and edit an existing question and all answers  '''
     t = get_object_or_404(Tool, id=tool)
     if t.owner != request.user:
         return HttpResponseForbidden('Not your tool.')
@@ -158,6 +159,7 @@ def builder_question(request, tool, question):
 
 @login_required
 def newanswer(request, tool, question):
+    ''' Lets user create a new answer '''
     t = get_object_or_404(Tool, id=tool)
     if t.owner != request.user:
         return HttpResponseForbidden('Not your tool.')
@@ -178,9 +180,11 @@ def newanswer(request, tool, question):
 
 @login_required
 def newanswers(request, tool, question):
+    ''' A form that allows users to create multiple answers at once '''
     t = get_object_or_404(Tool, id=tool)
     if t.owner != request.user:
         return HttpResponseForbidden('Not your tool.')
+
     q = Question.objects.get(tool=t, pk=question) 
     if request.method == 'POST':
         print(request.POST)
@@ -189,6 +193,7 @@ def newanswers(request, tool, question):
 
 @login_required
 def builder_answer(request, tool, question, answer):
+    ''' A form that allows users to edit a single answer '''
     t = get_object_or_404(Tool, pk=tool) 
     if t.owner != request.user:
         return HttpResponseForbidden('Not your tool.')
@@ -207,8 +212,6 @@ def builder_answer(request, tool, question, answer):
     form = AnswerForm(t, q.position, instance=a)  
     context = {'form': form, 'tool': t, 'question': q, 'answer': a}
     return render(request, 'regelhulpify/builder_answer.html', context)
-
-
 
 
 # API paths
@@ -276,7 +279,17 @@ def question_move(request, question, direction):
 
     return HttpResponse(status=200)  
 
+def tool_delete(request, tool):
+    ''' Deletes a tool after fetch request'''
+    if request.method == "DELETE":
+        t = get_object_or_404(Tool, id=tool)
+        t.delete()
+        return HttpResponse(status=200)  
+    else:
+        return HttpResponse(status=403)  
+
 def question_delete(request, question):
+    ''' Deletes a question after fetch request'''
     if request.method == "DELETE":
         q = get_object_or_404(Question, pk=question)
         q.delete()
@@ -285,29 +298,14 @@ def question_delete(request, question):
     else:
         return HttpResponse(status=403)  
 
-def tool_delete(request, tool):
-    if request.method == "DELETE":
-        t = get_object_or_404(Tool, id=tool)
-        t.delete()
-        return HttpResponse(status=200)  
-    else:
-        return HttpResponse(status=403)  
-
 def answer_delete(request, answer):
+    ''' Deletes a question after fetch request'''
     if request.method == "DELETE":
         a = get_object_or_404(Answer, pk=answer)
         a.delete()
         return HttpResponse(status=200)  
     else:
         return HttpResponse(status=403)  
-
-# def answer_add(request, question):
-#     if request.method == "POST":
-#         a = get_object_or_404(Answer, pk=answer)
-#         a.delete()
-#         return HttpResponse(status=200)  
-#     else:
-#         return HttpResponse(status=403)  
 
 def answer_getnext(request, question):
     ''' Load all 'next question' options for answer form '''
@@ -318,13 +316,12 @@ def answer_getnext(request, question):
         next_list = []
         for item in next_set:
             next_list.append({ 'pk': item.pk, 'text': item.text })
-
         return JsonResponse(next_list, safe=False)    
     else:
         return HttpResponse(status=403)  
 
 def answers_add(request, question):
-    ''' Add q '''
+    ''' Add multiple answers '''
     if request.method == "POST":
         q = get_object_or_404(Question, pk=question)
         t = q.tool
@@ -335,8 +332,6 @@ def answers_add(request, question):
                 nq = get_object_or_404(Question, pk=item['nextquestion'])
                 a = Answer(nextquestion=nq)
             a.save()
-      
-
         return HttpResponse(status=200)
     else:
         return HttpResponse(status=403)  
