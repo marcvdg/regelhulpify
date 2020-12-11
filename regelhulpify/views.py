@@ -43,12 +43,14 @@ def question(request, tool, question):
 
 @login_required
 def builder(request):
+    '''Homepage after login'''
     t = Tool.objects.filter(owner=request.user)
     context = {'tools': t}
     return render(request, 'regelhulpify/builder.html', context)
 
 @login_required
 def newtool(request):
+    ''' Form page to create new tool '''
     if request.method == 'POST':
         form = ToolForm(request.POST)
         if form.is_valid():
@@ -90,6 +92,7 @@ def edittool(request, tool):
 
 @login_required
 def builder_tool(request, tool):
+    ''' Gives an overview of a tool, including all questions and answers '''
     t = get_object_or_404(Tool, id=tool)
     
     # Check for ownership
@@ -103,6 +106,7 @@ def builder_tool(request, tool):
 
 @login_required
 def newquestion(request, tool, result=0):
+    ''' Form page to create new question, redirects to multiple answer form '''
     t = get_object_or_404(Tool, id=tool)
     if t.owner != request.user:
         return HttpResponseForbidden('Not your tool.')
