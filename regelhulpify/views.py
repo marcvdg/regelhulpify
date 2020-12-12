@@ -332,10 +332,11 @@ def answers_add(request, question):
         t = q.tool
         data = json.loads(request.body)
         for item in data['data']:
-            a = Answer(text=item['text'], question=q)
             if item['nextquestion'] != '':
                 nq = get_object_or_404(Question, pk=item['nextquestion'])
-                a = Answer(nextquestion=nq)
+                a = Answer(text=item['text'], question=q, nextquestion=nq)
+            else:
+                a = Answer(text=item['text'], question=q)
             a.save()
         return HttpResponse(status=200)
     else:
