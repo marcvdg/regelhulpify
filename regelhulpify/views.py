@@ -316,7 +316,8 @@ def answer_getnext(request, question):
     if request.method == "GET":
         q = get_object_or_404(Question, pk=question)
         t = q.tool
-        next_set = Question.objects.filter(tool=t).filter(position__gt=q.position).all()
+        # next_set = Question.objects.filter(tool=t).filter(position__gt=q.position).all()
+        next_set = Question.objects.filter(tool=t).all()
         next_list = []
         for item in next_set:
             next_list.append({ 'pk': item.pk, 'text': item.text })
